@@ -32,5 +32,6 @@
 	</build>
 	<modules>
 		<module>account-service</module>
+		<module>payment-service</module>
 	</modules>
 </project>
