@@ -1,0 +1,19 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: API-GATEWAY-SERVICE
+  cloud:
+    gateway:
+      routes:
+        - id: PAYMENT-SERVICE
+          uri: http://localhost:8083
+          predicates:
+            - Path=/api/payment/**
+          filters:
+            - AuthenticationFilter
+            
+        - id: auth-service
+          uri: http://localhost:8081
+          predicates:
+            - Path=/api/auth/**
