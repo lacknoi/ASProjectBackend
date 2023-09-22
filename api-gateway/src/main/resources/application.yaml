@@ -17,11 +17,25 @@ spring:
           uri: http://localhost:8081
           predicates:
             - Path=/api/auth/**
-            
         
         - id: ACCOUNT-SERVICE
           uri: http://localhost:8082
           predicates:
             - Path=/api/account/**
+          filters:
+            - AuthenticationFilter
+        
+        - id: MOBILE-SERVICE
+          uri: http://localhost:8082
+          predicates:
+            - Path=/api/mobile/**
+          filters:
+            - AuthenticationFilter
+            
+        
+        - id: DEBT-SERVICE
+          uri: http://localhost:8084
+          predicates:
+            - Path=/api/debt/**
           filters:
             - AuthenticationFilter

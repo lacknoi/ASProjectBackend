@@ -8,4 +8,6 @@ import imp.as.accountservice.model.Account;
 public interface AccountRepository extends JpaRepository<Account, Integer> {
 	@Query(value = "SELECT nvl(max(accountId) + 1, 1) accountId from Account")
 	Integer getNextValAccountNoSequence();
+	
+	Account getByAccountNo(String accountNo);
 }

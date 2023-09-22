@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class AccountResponse {
-	private Integer accountId;
+public class MobileResponse {
 	private String accountNo;
+	private String mobileNo;
 }

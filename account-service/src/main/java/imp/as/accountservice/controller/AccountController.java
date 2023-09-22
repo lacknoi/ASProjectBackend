@@ -23,7 +23,7 @@ public class AccountController {
 	public ResponseEntity<AccountResponse> getAccount() {
 		AccountResponse accountResponse = new AccountResponse();
 		
-		accountService.getAccount();
+//		iAccountService.getAccount();
 
 		return new ResponseEntity<>(accountResponse, HttpStatus.OK);
 	}
