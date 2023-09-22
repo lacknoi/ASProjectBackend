@@ -1,4 +1,4 @@
-package com.improve.skill.as.accountservice.dto;
+package com.improve.skill.as.paymentservice.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class AccountResponse {
+public class AccountBalanceResponce {
 	private String accountNo;
 }

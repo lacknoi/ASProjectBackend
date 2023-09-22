@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "AS_USERS", schema = "USRDEBT")
 public class UserCredential {
 	@Id
-    private String userId;
+    private Integer userId;
     private String name;
     private String email;
     private String password;
