@@ -49,6 +49,7 @@
 		<module>auth-service</module>
 		<module>registry-service</module>
 		<module>api-gateway</module>
+		<module>debt-service</module>
 	</modules>
 	<repositories>
 		<repository>

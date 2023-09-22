@@ -1,0 +1,15 @@
+server:
+  port: 8084
+
+spring:
+  application:
+    name: account-service
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+         format_sql: true
+
+batch:
+   path:
+     config: D:/Test/batch-config.properties
