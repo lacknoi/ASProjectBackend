@@ -14,7 +14,7 @@ import imp.as.accountservice.dto.AccountResponse;
 import imp.as.accountservice.service.AccountService;
 
 @RestController
-@RequestMapping("/api/account")
+@RequestMapping("/api/accountservice/account")
 public class AccountController {
 	@Autowired
 	private AccountService accountService;

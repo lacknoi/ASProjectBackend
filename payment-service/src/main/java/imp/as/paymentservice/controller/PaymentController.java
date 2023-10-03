@@ -1,7 +1,6 @@
 package imp.as.paymentservice.controller;
 
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,5 +31,12 @@ public class PaymentController {
 		AccountBalanceResponce accountResponse = paymentService.initAccountBalance(accountBalanceRequest);
 		
 		return new ResponseEntity<>(accountResponse, HttpStatus.CREATED);
+	}
+	
+	@GetMapping("/accountBalanceDebt")
+	public ResponseEntity<List<AccountBalanceResponce>> getAccountBalanceDebt() {
+		List<AccountBalanceResponce> accountResponses = paymentService.getAccountBalanceDebt();
+		
+		return new ResponseEntity<>(accountResponses, HttpStatus.OK);
 	}
 }

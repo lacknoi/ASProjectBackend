@@ -1,5 +1,5 @@
 package imp.as.debtservice.service;
 
-public interface DebtService {
-	
+public interface ExemptService {
+
 }

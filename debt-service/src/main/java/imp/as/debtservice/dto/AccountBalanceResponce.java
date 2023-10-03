@@ -1,4 +1,4 @@
-package imp.as.paymentservice.dto;
+package imp.as.debtservice.dto;
 
 import java.math.BigDecimal;
 

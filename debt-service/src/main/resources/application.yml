@@ -3,12 +3,13 @@ server:
 
 spring:
   application:
-    name: account-service
+    name: debt-service
   jpa:
     show-sql: true
     properties:
       hibernate:
          format_sql: true
+         use_get_generated_keys: true
 
 batch:
    path:

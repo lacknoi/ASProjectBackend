@@ -1,14 +1,13 @@
 package imp.as.accountservice.service.impl;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import imp.as.accountservice.constant.AppConstant;
-import imp.as.accountservice.dto.AccountRequest;
-import imp.as.accountservice.dto.AccountResponse;
 import imp.as.accountservice.dto.MobileRequest;
 import imp.as.accountservice.dto.MobileResponse;
 import imp.as.accountservice.model.Account;
@@ -39,14 +38,6 @@ public class MobileServiceImpl implements MobileService{
 	public MobileResponse registerMobile(MobileRequest mobileRequest) {
 		Account account = accountRepository.getByAccountNo(mobileRequest.getAccountNo());
 		
-		if(account == null) {
-			AccountResponse accountResponse = accountService.createAccount(AccountRequest.builder().accountName(mobileRequest.getAccountNo())
-																.userName(mobileRequest.getUserName()).build());
-			
-			account = new Account();
-			account.setAccountId(accountResponse.getAccountId());
-		}
-		
 		Integer mobileId = mobileRepository.getNextValMobileSequence();
 		
 		Mobile mobile = new Mobile();
@@ -64,5 +55,18 @@ public class MobileServiceImpl implements MobileService{
 		return MobileResponse.builder()
 							.accountNo(mobileRequest.getAccountNo())
 							.mobileNo(mobileRequest.getMobileNo()).build();
+	}
+	
+	public MobileResponse mapMobileToMobileResponse(Mobile mobile) {
+		return MobileResponse.builder()
+						.accountNo(mobile.getAccount().getAccountNo())
+						.mobileNo(mobile.getMobileNo())
+						.build();
+	}
+	
+	public List<MobileResponse> getMobileActiveByAccountNo(String accountNo){
+		List<Mobile> mobiles = mobileRepository.getMobileActiveByAccountNo(accountNo);
+		return mobiles.stream().map(mobile -> mapMobileToMobileResponse(mobile))
+				.toList();
 	}
 }
