@@ -12,30 +12,36 @@ spring:
             - Path=/api/payment/**
           filters:
             - AuthenticationFilter
-            
         - id: auth-service
           uri: http://localhost:8081
           predicates:
             - Path=/api/auth/**
-        
         - id: ACCOUNT-SERVICE
           uri: http://localhost:8082
           predicates:
             - Path=/api/accountservice/**
           filters:
             - AuthenticationFilter
-        
         - id: MOBILE-SERVICE
           uri: http://localhost:8082
           predicates:
             - Path=/api/mobile/**
           filters:
             - AuthenticationFilter
-            
-        
         - id: DEBT-SERVICE
           uri: http://localhost:8084
           predicates:
             - Path=/api/debt/**
           filters:
             - AuthenticationFilter
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:3000"
+            allowedHeaders:
+            - Content-Type
+            - Authorization
+            allowedMethods:
+            - GET
+            - POST
+            allow-credentials: true

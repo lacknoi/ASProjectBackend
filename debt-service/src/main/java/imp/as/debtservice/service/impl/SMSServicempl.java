@@ -38,9 +38,7 @@ public class SMSServicempl implements SMSService{
 		return SMSTransaction.builder()
 						.accountNo(mobileResponse.getAccountNo())
 						.mobileNo(mobileResponse.getMobileNo())
-						.created(new Date())
 						.createdBy("DebtService")
-						.lastUpd(new Date())
 						.lastUpdBy("DebtService")
 						.build();
 	}
