@@ -35,13 +35,19 @@ spring:
           filters:
             - AuthenticationFilter
       globalcors:
+        add-to-simple-url-handler-mapping: true
         corsConfigurations:
           '[/**]':
             allowedOrigins: "http://localhost:3000"
             allowedHeaders:
-            - Content-Type
-            - Authorization
+            - "Content-Type"
+            - "Origin"
+            - "Accept"
+            - "Referer"
+            - "Authorization"
             allowedMethods:
             - GET
             - POST
-            allow-credentials: true
+            - OPTIONS
+            default-filters: 
+            - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin, RETAIN_FIRST

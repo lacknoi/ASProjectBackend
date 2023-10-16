@@ -37,8 +37,6 @@ public class JwtService {
     }
 
     private Key getSignKey() {
-    	System.out.println("secret : " + secret);
-    	
         byte[] keyBytes = Decoders.BASE64.decode(secret);
         return Keys.hmacShaKeyFor(keyBytes);
     }

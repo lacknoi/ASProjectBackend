@@ -4,26 +4,22 @@ import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
 
-import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Component
-public class AuthenticationFilter implements Filter {
+public class AuthenticationFilter extends OncePerRequestFilter {
 	@Autowired
 	private JwtUtil jwtUtil;
 	
 	@Override
-    public void doFilter(ServletRequest request,ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-        
-        System.out.println("--doFilter--");
-        
-        final String jwtAuthToken = httpServletRequest.getHeader("Authorization");
+    protected void doFilterInternal(HttpServletRequest request,  HttpServletResponse response, FilterChain chain)
+            throws ServletException, IOException {
+		final String jwtAuthToken = request.getHeader("Authorization");
         
         if (jwtAuthToken != null && jwtAuthToken.startsWith("Bearer ")) {
         	String jwtToken = jwtAuthToken.substring(7);
