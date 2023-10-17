@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import imp.as.paymentservice.dto.AccountBalanceRequest;
-import imp.as.paymentservice.dto.AccountBalanceResponce;
+import imp.as.paymentservice.dto.request.AccountBalanceRequest;
+import imp.as.paymentservice.dto.response.AccountBalanceResponce;
 import imp.as.paymentservice.service.PaymentService;
 
 @RestController

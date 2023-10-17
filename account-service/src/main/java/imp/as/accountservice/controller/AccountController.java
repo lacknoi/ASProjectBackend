@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import imp.as.accountservice.dto.AccountRequest;
-import imp.as.accountservice.dto.AccountResponse;
+import imp.as.accountservice.dto.request.AccountRequest;
+import imp.as.accountservice.dto.response.AccountResponse;
 import imp.as.accountservice.service.AccountService;
 
 @RestController

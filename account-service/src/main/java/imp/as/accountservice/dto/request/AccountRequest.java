@@ -1,4 +1,4 @@
-package imp.as.accountservice.dto;
+package imp.as.accountservice.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class AccountResponse {
-	private Integer accountId;
-	private String accountNo;
+public class AccountRequest {
+	private String accountName;
+	private String userName;
 }

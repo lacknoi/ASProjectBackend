@@ -1,13 +1,15 @@
-package imp.as.paymentservice.dto;
+package imp.as.accountservice.dto.response;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AccountBalanceRequest {
+@Builder
+public class AccountResponse {
+	private Integer accountId;
 	private String accountNo;
-	private String userName;
 }

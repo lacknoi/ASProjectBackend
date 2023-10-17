@@ -1,4 +1,4 @@
-package imp.as.accountservice.dto;
+package imp.as.accountservice.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class AccountBalanceRequest {
+public class MobileResponse {
 	private String accountNo;
+	private String mobileNo;
 }

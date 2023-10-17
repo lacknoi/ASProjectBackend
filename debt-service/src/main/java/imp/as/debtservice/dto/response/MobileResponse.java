@@ -1,14 +1,15 @@
-package imp.as.accountservice.dto;
+package imp.as.debtservice.dto.response;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MobileRequest {
+@Builder
+public class MobileResponse {
 	private String accountNo;
 	private String mobileNo;
-	private String userName;
 }

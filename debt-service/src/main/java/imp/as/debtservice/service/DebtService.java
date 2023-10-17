@@ -1,5 +1,13 @@
 package imp.as.debtservice.service;
 
-public interface DebtService {
+import org.springframework.stereotype.Service;
+
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+@Transactional
+public class DebtService {
 	
 }

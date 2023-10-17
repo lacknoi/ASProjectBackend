@@ -1,6 +1,4 @@
-package imp.as.debtservice.dto;
-
-import java.math.BigDecimal;
+package imp.as.accountservice.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,5 +11,4 @@ import lombok.NoArgsConstructor;
 @Builder
 public class AccountBalanceResponce {
 	private String accountNo;
-	private BigDecimal totalBalance;
 }

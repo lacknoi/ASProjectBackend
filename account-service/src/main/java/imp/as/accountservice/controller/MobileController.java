@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import imp.as.accountservice.dto.MobileRequest;
-import imp.as.accountservice.dto.MobileResponse;
+import imp.as.accountservice.dto.request.MobileRequest;
+import imp.as.accountservice.dto.response.MobileResponse;
 import imp.as.accountservice.service.MobileService;
 
 @RestController

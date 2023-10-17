@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,6 +18,8 @@ import java.util.Map;
 public class JwtService {
 	@Value("${jwt.secret}")
     public String secret;
+	@Value("${jwt.expiration}")
+    private Integer expiration;
 
     public void validateToken(final String token) {
         Jwts.parserBuilder().setSigningKey(getSignKey()).build().parseClaimsJws(token);
@@ -28,11 +31,18 @@ public class JwtService {
     }
 
     private String createToken(Map<String, Object> claims, String userName) {
+    	Date currentDate = new Date();
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(currentDate);
+        cal.add(Calendar.MINUTE, expiration);
+        currentDate = cal.getTime();
+        
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(userName)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30))
+                .setExpiration(currentDate)
                 .signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
     }
 

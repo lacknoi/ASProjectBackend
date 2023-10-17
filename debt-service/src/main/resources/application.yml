@@ -10,6 +10,8 @@ spring:
       hibernate:
          format_sql: true
          use_get_generated_keys: true
+    hibernate:
+      ddl-auto: none
 
 batch:
    path:

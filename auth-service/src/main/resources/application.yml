@@ -9,7 +9,9 @@ spring:
     properties:
       hibernate:
          format_sql: true
+    hibernate:
+      ddl-auto: none
 
 batch:
    path:
-     config: D:/Test/batch-config.properties
+     config: D:/GIT/ImporveSkillProject/ASProject/ASBackend/batch-config.properties

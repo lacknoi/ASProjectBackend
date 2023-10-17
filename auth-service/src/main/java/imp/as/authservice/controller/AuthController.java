@@ -13,13 +13,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import imp.as.authservice.dto.ApiResponse;
 import imp.as.authservice.dto.AuthRequest;
 import imp.as.authservice.dto.AuthResponse;
 import imp.as.authservice.service.AuthService;
 
 @RestController
 @RequestMapping("/api/auth")
-public class AuthController {
+public class AuthController extends AbsController{
 	@Autowired
 	private AuthService service;
 
@@ -27,17 +28,17 @@ public class AuthController {
 	private AuthenticationManager authenticationManager;
 	
 	@PostMapping("/register")
-    public String addNewUser(@RequestBody AuthRequest user) {
-        return service.saveUser(user);
+    public ResponseEntity<ApiResponse> addNewUser(@RequestBody AuthRequest user) {
+        return responseOK(service.saveUser(user));
     }
 	    
 	@PostMapping("/token")
-    public ResponseEntity<AuthResponse> getToken(@RequestBody AuthRequest authRequest) {
+    public ResponseEntity<ApiResponse> getToken(@RequestBody AuthRequest authRequest) {
         Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
         if (authenticate.isAuthenticated()) {
             String token = service.generateToken(authRequest.getUsername());
             
-            return new ResponseEntity<>(AuthResponse.builder().token(token).build(), HttpStatus.OK);
+            return responseOK(AuthResponse.builder().token(token).build());
         } else {
             throw new RuntimeException("invalid access");
         }
