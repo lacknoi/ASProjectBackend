@@ -1,4 +1,4 @@
-package imp.as.authservice.dto;
+package imp.as.accountservice.dto.response;
 
 import java.util.Date;
 

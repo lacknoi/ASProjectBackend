@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import imp.as.authservice.dto.ApiResponse;
-import imp.as.authservice.dto.AuthRequest;
-import imp.as.authservice.dto.AuthResponse;
+import imp.as.authservice.dto.request.AuthRequest;
+import imp.as.authservice.dto.response.ApiResponse;
+import imp.as.authservice.dto.response.AuthResponse;
 import imp.as.authservice.service.AuthService;
 
 @RestController
@@ -38,7 +38,10 @@ public class AuthController extends AbsController{
         if (authenticate.isAuthenticated()) {
             String token = service.generateToken(authRequest.getUsername());
             
-            return responseOK(AuthResponse.builder().token(token).build());
+            return responseOK(AuthResponse.builder()
+            							.token(token)
+            							.username(authRequest.getUsername())
+            							.build());
         } else {
             throw new RuntimeException("invalid access");
         }

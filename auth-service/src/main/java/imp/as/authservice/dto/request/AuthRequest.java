@@ -1,4 +1,4 @@
-package imp.as.authservice.dto;
+package imp.as.authservice.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

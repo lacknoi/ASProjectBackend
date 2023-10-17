@@ -1,6 +1,7 @@
 package imp.as.accountservice.service;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -67,14 +68,15 @@ public class AccountService{
 					.build();
 	}
 	
-	public void getAccount() {
-		ResponseEntity<String> response = webClientBuilder.build().get()
-											.uri(EndpointConstant.ENDPOINT_PAYMENT + EndpointConstant.METHOD_PAYMENT)
-											.retrieve()
-											.toEntity(String.class)
-											.block();
+	private AccountResponse mapAccountToAccountResponse(Account account){
+		return AccountResponse.builder()
+						.accountNo(account.getAccountNo())
+						.build();
+	}
+	
+	public List<AccountResponse> getAccount() {
+		List<Account> accounts = accountRepository.findAll();
 		
-		System.out.println("StatusCode " + response.getStatusCode());		
-		System.out.println("Body " + response.getBody());
+		return accounts.stream().map(account -> mapAccountToAccountResponse(account)).toList();
 	}
 }

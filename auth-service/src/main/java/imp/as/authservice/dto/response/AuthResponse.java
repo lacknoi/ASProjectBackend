@@ -1,4 +1,4 @@
-package imp.as.authservice.dto;
+package imp.as.authservice.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,4 +11,5 @@ import lombok.NoArgsConstructor;
 @Builder
 public class AuthResponse {
 	private String token;
+	private String username;
 }

@@ -18,7 +18,7 @@ import imp.as.accountservice.service.MobileService;
 
 @RestController
 @RequestMapping("/api/accountservice/mobile")
-public class MobileController {
+public class MobileController extends AbsController{
 	@Autowired
 	private MobileService mobileService;
 	

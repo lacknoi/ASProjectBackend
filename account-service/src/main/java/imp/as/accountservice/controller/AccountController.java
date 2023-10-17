@@ -11,21 +11,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 import imp.as.accountservice.dto.request.AccountRequest;
 import imp.as.accountservice.dto.response.AccountResponse;
+import imp.as.accountservice.dto.response.ApiResponse;
 import imp.as.accountservice.service.AccountService;
 
 @RestController
 @RequestMapping("/api/accountservice/account")
-public class AccountController {
+public class AccountController extends AbsController{
 	@Autowired
 	private AccountService accountService;
 	
 	@GetMapping("/account")
-	public ResponseEntity<AccountResponse> getAccount() {
-		AccountResponse accountResponse = new AccountResponse();
-		
-//		iAccountService.getAccount();
+	public ResponseEntity<ApiResponse> getAccount() {
 
-		return new ResponseEntity<>(accountResponse, HttpStatus.OK);
+		return responseOK(accountService.getAccount());
 	}
 	
 	@PostMapping("/createAccount")

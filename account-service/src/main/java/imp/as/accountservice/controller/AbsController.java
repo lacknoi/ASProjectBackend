@@ -1,10 +1,10 @@
-package imp.as.authservice.controller;
+package imp.as.accountservice.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
-import imp.as.authservice.dto.response.ApiResponse;
+import imp.as.accountservice.dto.response.ApiResponse;
 
 @Component
 public class AbsController {

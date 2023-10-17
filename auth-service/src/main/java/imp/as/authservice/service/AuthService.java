@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import imp.as.authservice.dto.AuthRequest;
+import imp.as.authservice.dto.request.AuthRequest;
 import imp.as.authservice.entity.UserCredential;
 import imp.as.authservice.repository.UserCredentialRepository;
 
