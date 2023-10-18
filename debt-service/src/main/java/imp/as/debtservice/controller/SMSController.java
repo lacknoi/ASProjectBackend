@@ -12,6 +12,11 @@ import imp.as.debtservice.service.SMSService;
 public class SMSController {
 	@Autowired
 	private SMSService smsService;
+
+	@GetMapping("/test")
+	public void test() {
+		System.out.println("--test--");
+	}
 	
 	@GetMapping("/assignSMS")
 	public void assignSMS() {
