@@ -11,10 +11,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import imp.as.debtservice.constant.EndpointConstant;
+import imp.as.debtservice.dto.request.MessageRequest;
 import imp.as.debtservice.dto.response.AccountBalanceResponse;
+import imp.as.debtservice.dto.response.MessageResponse;
 import imp.as.debtservice.dto.response.MobileResponse;
+import imp.as.debtservice.model.Message;
 import imp.as.debtservice.model.SMSTransaction;
 import imp.as.debtservice.model.TempTransaction;
+import imp.as.debtservice.repository.MessageRepository;
 import imp.as.debtservice.repository.SMSTransactionRepository;
 import imp.as.debtservice.repository.TempTransactionRepository;
 import imp.as.debtservice.utils.CsvWriter;
@@ -32,6 +36,22 @@ public class SMSService{
 	private final SMSTransactionRepository smsTransactionRepository;
 	@Autowired
 	private final TempTransactionRepository tempTransactionRepository;
+	@Autowired
+	private final MessageRepository messageRepository;
+	
+	public MessageResponse saveMessage(MessageRequest messageRequest) {
+		Message mess = Message.builder()
+								.message(messageRequest.getMessage())
+								.created(new Date())
+								.createdBy(messageRequest.getUserName())
+								.lastUpd(new Date())
+								.lastUpdBy(messageRequest.getUserName()).build();
+		
+		messageRepository.save(mess);
+		
+		return MessageResponse.builder()
+						.messageId(mess.getMessageId()).build();
+	}
 	
 	public SMSTransaction mapMobileResponseToSMSTransaction(MobileResponse mobileResponse) {
 		return SMSTransaction.builder()

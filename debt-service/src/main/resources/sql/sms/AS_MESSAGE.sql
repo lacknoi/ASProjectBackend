@@ -1,5 +1,5 @@
---drop table AS_SMS_MESSAGE
-create table AS_SMS_MESSAGE(
+--drop table AS_MESSAGE
+create table AS_MESSAGE(
   MESSAGE_ID int
   , MESSAGE nvarchar2(2000)
   , CREATED date

@@ -24,8 +24,8 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 		
 		String path = request.getRequestURI();
 		
-		if(!path.contains("api-docs") && !path.contains("swagger")
-				&& !referer.contains("api-docs") && !referer.contains("swagger")) {
+		if(path != null &&!path.contains("api-docs") && !path.contains("swagger")
+				&& referer != null && !referer.contains("api-docs") && !referer.contains("swagger")) {
 	        if (jwtAuthToken != null && jwtAuthToken.startsWith("Bearer ")) {
 	        	String jwtToken = jwtAuthToken.substring(7);
 	        	
