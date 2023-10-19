@@ -39,6 +39,25 @@ public class SMSService{
 	@Autowired
 	private final MessageRepository messageRepository;
 	
+	public MessageResponse mapMessageToMessageResponse(Message message) {
+		return MessageResponse.builder()
+								.messageId(message.getMessageId())
+								.message(message.getMessage())
+								.build();
+	}
+	
+	public MessageResponse getMessageById(Integer messageId){
+		return mapMessageToMessageResponse(messageRepository.findById(messageId).get());
+	}
+	
+	public List<MessageResponse> getAllMessage(){
+		List<Message> messages = messageRepository.findAll();
+		
+		return messages.stream()
+					.map(message -> mapMessageToMessageResponse(message))
+					.toList();
+	}
+	
 	public MessageResponse saveMessage(MessageRequest messageRequest) {
 		Message mess = Message.builder()
 								.message(messageRequest.getMessage())

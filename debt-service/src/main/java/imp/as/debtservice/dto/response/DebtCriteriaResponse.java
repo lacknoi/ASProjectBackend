@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class MessageResponse {
-	private Integer messageId;
-	private String message;
+public class DebtCriteriaResponse {
+	private String modeId;
 }

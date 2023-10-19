@@ -55,16 +55,15 @@ public class MobileService{
 							.mobileNo(mobileRequest.getMobileNo()).build();
 	}
 	
-	public MobileResponse mapMobileToMobileResponse(Mobile mobile) {
-		return MobileResponse.builder()
-						.accountNo(mobile.getAccount().getAccountNo())
-						.mobileNo(mobile.getMobileNo())
-						.build();
-	}
-	
 	public List<MobileResponse> getMobileActiveByAccountNo(String accountNo){
 		List<Mobile> mobiles = mobileRepository.getMobileActiveByAccountNo(accountNo);
-		return mobiles.stream().map(mobile -> mapMobileToMobileResponse(mobile))
+		return mobiles.stream().map(Mobile::getMobileResponse)
 				.toList();
+	}
+	
+	public List<MobileResponse> getAllMobiles(){
+		List<Mobile> mobiles = mobileRepository.findAll();
+		
+		return mobiles.stream().map(Mobile::getMobileResponse).toList();
 	}
 }

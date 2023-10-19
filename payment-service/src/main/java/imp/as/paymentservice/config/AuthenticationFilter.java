@@ -20,12 +20,19 @@ public class AuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,  HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
 		final String jwtAuthToken = request.getHeader("Authorization");
+		
 		final String referer = request.getHeader("referer");
 		
+//        final Enumeration<String> requestHeaderNames = request.getHeaderNames();
+//        while (requestHeaderNames.hasMoreElements()) {
+//            String headerName = requestHeaderNames.nextElement();
+//            System.out.println(headerName + ":" + request.getHeader(headerName));
+//        }
+
 		String path = request.getRequestURI();
 		
-		if(!path.contains("api-docs") && !path.contains("swagger")
-				&& !referer.contains("api-docs") && !referer.contains("swagger")) {
+		if(path != null &&!path.contains("api-docs") && !path.contains("swagger")
+				&& referer != null && !referer.contains("api-docs") && !referer.contains("swagger")) {
 	        if (jwtAuthToken != null && jwtAuthToken.startsWith("Bearer ")) {
 	        	String jwtToken = jwtAuthToken.substring(7);
 	        	
@@ -41,7 +48,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 	                throw new RuntimeException("un authorized access to application");
 	        	}
 	        }else {
-	        	throw new RuntimeException("missing authorization header");
+//	        	throw new RuntimeException("missing authorization header");
 	        }
 		}
         

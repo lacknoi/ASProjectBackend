@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import imp.as.accountservice.dto.request.MobileRequest;
+import imp.as.accountservice.dto.response.ApiResponse;
 import imp.as.accountservice.dto.response.MobileResponse;
 import imp.as.accountservice.service.MobileService;
 
@@ -23,16 +24,23 @@ public class MobileController extends AbsController{
 	private MobileService mobileService;
 	
 	@PostMapping("/registerMobile")
-	public ResponseEntity<MobileResponse> registerMobile(@RequestBody MobileRequest mobileRequest) {
+	public ResponseEntity<ApiResponse> registerMobile(@RequestBody MobileRequest mobileRequest) {
 		MobileResponse mobileResponse = mobileService.registerMobile(mobileRequest);
 		
-		return new ResponseEntity<>(mobileResponse, HttpStatus.CREATED);
+		return responseOK(mobileResponse);
 	}
 	
 	@GetMapping("/mobileActive")
-	public ResponseEntity<List<MobileResponse>> registerMobile(@RequestParam("accountNo") String accountNo) {
+	public ResponseEntity<ApiResponse> registerMobile(@RequestParam("accountNo") String accountNo) {
 		List<MobileResponse> mobileResponse = mobileService.getMobileActiveByAccountNo(accountNo);
 		
-		return new ResponseEntity<>(mobileResponse, HttpStatus.OK);
+		return responseOK(mobileResponse);
+	}
+	
+	@GetMapping("/mobiles")
+	public ResponseEntity<ApiResponse> getAllMobiles() {
+		List<MobileResponse> mobileResponse = mobileService.getAllMobiles();
+		
+		return responseOK(mobileResponse);
 	}
 }
