@@ -43,6 +43,8 @@ public class DebtCriteria {
 	public DebtCriteriaResponse getDebtCriteriaResponse() {
 		return DebtCriteriaResponse.builder()
 								.modeId(modeId)
+								.preassignId(preassignId)
+								.criteriaId(criteriaId)
 								.build();
 	}
 }

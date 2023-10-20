@@ -5,9 +5,9 @@ create table USRDEBT.AS_DEBT_CRITERIA(
   , CRITERIA_TYPE nvarchar2(100)
   , CRITERIA_DESCRIPTION nvarchar2(100)
   , ASSIGN_STATUS nvarchar2(5)
-  , PREASSIGN_ID nvarchar2(5)
+  , PREASSIGN_ID nvarchar2(10)
   , PREASSIGN_DATE date
-  , ASSIGN_ID nvarchar2(50)
+  , ASSIGN_ID nvarchar2(10)
   , ASSIGN_DATE date
   , UNASSIGN_DATE date
   , DEBT_AMT_FROM number(22,2)

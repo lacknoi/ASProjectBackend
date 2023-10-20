@@ -11,4 +11,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class DebtCriteriaResponse {
 	private String modeId;
+	private String preassignId;
+	private Integer criteriaId;
 }

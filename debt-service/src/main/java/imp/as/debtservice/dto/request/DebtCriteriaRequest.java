@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DebtCriteriaRequest {
+	private Integer criteriaId;
 	private String modeId;
 	private String description;
 	private BigDecimal debtMnyFrom;
