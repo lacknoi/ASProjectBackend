@@ -1,5 +1,19 @@
 package imp.as.accountservice.controller;
 
+import java.time.Duration;
+import java.util.Arrays;
+import java.util.Properties;
+
+import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.apache.kafka.clients.consumer.ConsumerRecords;
+import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.Producer;
+import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.common.serialization.StringDeserializer;
+import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,9 +41,55 @@ public class AccountController extends AbsController{
 	}
 	
 	@PostMapping("/createAccount")
-	public ResponseEntity<AccountResponse> createAccount(@RequestBody AccountRequest accountRequest) {
+	public ResponseEntity<ApiResponse> createAccount(@RequestBody AccountRequest accountRequest) {
 		AccountResponse accountResponse = accountService.createAccount(accountRequest);
 
-		return new ResponseEntity<>(accountResponse, HttpStatus.CREATED);
+		return responseOK(accountResponse);
+	}
+	
+	@GetMapping("/test-write")
+	public ResponseEntity<ApiResponse> testWriteKafka() {
+		String TOPIC = "create-account";
+		
+		Properties properties = new Properties();
+		properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+		properties.put(ProducerConfig.ACKS_CONFIG, "all");
+		properties.put(ProducerConfig.RETRIES_CONFIG, 0);
+		properties.put(ProducerConfig.BATCH_SIZE_CONFIG, 16384);
+		properties.put(ProducerConfig.LINGER_MS_CONFIG, 1);
+		properties.put(ProducerConfig.BUFFER_MEMORY_CONFIG, 33554432);
+		properties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+		properties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+		
+		Producer<String, String> producer = new KafkaProducer<>(properties);
+		producer.send(new ProducerRecord<String, String>(TOPIC, "XXX"));
+		producer.close();
+
+		return responseOK("testWriteKafka");
+	}
+	
+	@GetMapping("/test-read")
+	public ResponseEntity<ApiResponse> testReadKafka() {
+		String TOPIC = "create-account";
+		
+		Properties properties = new Properties();
+		properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+		properties.put(ConsumerConfig.GROUP_ID_CONFIG, "test");
+		properties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "true");
+		properties.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, "1000");
+		properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
+		properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
+		
+		KafkaConsumer<String, String> consumer = new KafkaConsumer<>(properties);
+		consumer.subscribe(Arrays.asList(TOPIC));
+		
+		ConsumerRecords<String, String> records = consumer.poll(Duration.ofSeconds(2));
+		for(ConsumerRecord<String, String> record : records) {
+			System.out.println(record.offset() + ":" + record.key());
+		}
+		
+		consumer.close();
+		
+		return responseOK("testReadKafka");
 	}
 }
