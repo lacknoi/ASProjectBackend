@@ -1,6 +1,5 @@
 server:
   port: 8084
-
 spring:
   application:
     name: debt-service
@@ -12,7 +11,8 @@ spring:
          use_get_generated_keys: true
     hibernate:
       ddl-auto: none
-
+  kafka:
+    bootstrap-servers: localhost:9092
 batch:
    path:
      config: D:/Test/batch-config.properties

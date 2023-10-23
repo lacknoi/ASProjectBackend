@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 import imp.as.accountservice.dto.request.AccountRequest;
 import imp.as.accountservice.dto.response.AccountResponse;
 import imp.as.accountservice.dto.response.ApiResponse;
+import imp.as.accountservice.kafka.CreateAccountProducerService;
 import imp.as.accountservice.service.AccountService;
 
 @RestController
@@ -33,6 +34,8 @@ import imp.as.accountservice.service.AccountService;
 public class AccountController extends AbsController{
 	@Autowired
 	private AccountService accountService;
+	@Autowired
+	private CreateAccountProducerService createAccountProducerService;
 	
 	@GetMapping("/account")
 	public ResponseEntity<ApiResponse> getAccount() {
@@ -49,21 +52,7 @@ public class AccountController extends AbsController{
 	
 	@GetMapping("/test-write")
 	public ResponseEntity<ApiResponse> testWriteKafka() {
-		String TOPIC = "create-account";
-		
-		Properties properties = new Properties();
-		properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-		properties.put(ProducerConfig.ACKS_CONFIG, "all");
-		properties.put(ProducerConfig.RETRIES_CONFIG, 0);
-		properties.put(ProducerConfig.BATCH_SIZE_CONFIG, 16384);
-		properties.put(ProducerConfig.LINGER_MS_CONFIG, 1);
-		properties.put(ProducerConfig.BUFFER_MEMORY_CONFIG, 33554432);
-		properties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
-		properties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
-		
-		Producer<String, String> producer = new KafkaProducer<>(properties);
-		producer.send(new ProducerRecord<String, String>(TOPIC, "XXX"));
-		producer.close();
+		createAccountProducerService.sendMessage("AC");
 
 		return responseOK("testWriteKafka");
 	}

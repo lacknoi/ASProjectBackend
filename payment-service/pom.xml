@@ -65,8 +65,8 @@
 	      <version>2.0.0</version>
 	   </dependency>
 	   <dependency>
-		   <groupId>org.apache.kafka</groupId>
-		   <artifactId>kafka-clients</artifactId>
-	   </dependency>
+		  <groupId>org.springframework.kafka</groupId>
+		  <artifactId>spring-kafka</artifactId>
+		</dependency>
 	</dependencies>
 </project>

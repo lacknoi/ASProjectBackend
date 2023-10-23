@@ -3,7 +3,7 @@
 --Kafka
 https://kafka.apache.org/quickstart
 Step 2: Start the Kafka environment
-bin\windows\zookeeper-server-start.bat config\zookeeper.propertiess
+bin\windows\zookeeper-server-start.bat config\zookeeper.properties
 bin\windows\kafka-server-start.bat config\server.properties
 bin\windows\kafka-topics.bat --create --topic create-account --bootstrap-server localhost:9092
 Step 3: Create a topic to store your events
