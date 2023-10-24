@@ -2,24 +2,21 @@ package imp.as.accountservice.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import imp.as.accountservice.constant.AppConstant;
-import imp.as.accountservice.constant.EndpointConstant;
-import imp.as.accountservice.dto.request.AccountBalanceRequest;
 import imp.as.accountservice.dto.request.AccountRequest;
-import imp.as.accountservice.dto.response.AccountBalanceResponce;
 import imp.as.accountservice.dto.response.AccountResponse;
+import imp.as.accountservice.kafka.CreateAccountProducerService;
 import imp.as.accountservice.model.Account;
 import imp.as.accountservice.repository.AccountRepository;
 import imp.as.accountservice.utils.DateTimeUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import reactor.core.publisher.Mono;
 
 @Service
 @RequiredArgsConstructor
@@ -29,14 +26,26 @@ public class AccountService{
 	private final WebClient.Builder webClientBuilder;
 	@Autowired
 	private final AccountRepository accountRepository;
+	@Autowired
+	private CreateAccountProducerService createAccountProducerService;
+	
+	public String getNextAccountNo() {
+		String dateFor = DateTimeUtils.formatDate(AppConstant.ACCOUNT_NO_FORMAT, DateTimeUtils.currentDate());
+		
+		Optional<String> preassignOpt = accountRepository.getNextValAccountNoSequence();
+		
+		if(!preassignOpt.isEmpty()) {
+			Integer nextId = Integer.parseInt(preassignOpt.get().substring(preassignOpt.get().length() - 4)) + 1;
+			
+			return dateFor + String.format("%04d", nextId);
+		}else {
+			return dateFor + "0001";
+		}
+	}
 	
 	private Account generateAccount(AccountRequest accountRequest) {
-		String dateFor = DateTimeUtils.formatDate(AppConstant.ACCOUNT_NO_FORMAT, DateTimeUtils.currentDate());
-		Integer accountNoSeq = accountRepository.getNextValAccountNoSequence();
-		
 		Account account = new Account();
-		account.setAccountId(accountNoSeq);
-		account.setAccountNo(dateFor + String.format("%04d", accountNoSeq));
+		account.setAccountNo(getNextAccountNo());
 		account.setAccountName(accountRequest.getAccountName());
 		account.setCreated(new Date());
 		account.setCreatedBy(accountRequest.getUserName());
@@ -51,16 +60,7 @@ public class AccountService{
 		
 		accountRepository.save(account);
 		
-		ResponseEntity<AccountBalanceResponce> response = webClientBuilder.build().post()
-				.uri(EndpointConstant.ENDPOINT_PAYMENT + EndpointConstant.METHOD_INIT_ACCOUNT_BALANCE)
-				.body(Mono.just(AccountBalanceRequest.builder().accountNo(account.getAccountNo()).build())
-							, AccountBalanceRequest.class)
-				.retrieve()
-				.toEntity(AccountBalanceResponce.class)
-				.block();
-		
-		System.out.println("StatusCode " + response.getStatusCode());		
-		System.out.println("Body " + response.getBody());
+		createAccountProducerService.sendMessage(account.getCreateAccountTopicRequest());
 		
 		return AccountResponse.builder()
 					.accountNo(account.getAccountNo())
@@ -68,15 +68,9 @@ public class AccountService{
 					.build();
 	}
 	
-	private AccountResponse mapAccountToAccountResponse(Account account){
-		return AccountResponse.builder()
-						.accountNo(account.getAccountNo())
-						.build();
-	}
-	
 	public List<AccountResponse> getAccount() {
 		List<Account> accounts = accountRepository.findAll();
 		
-		return accounts.stream().map(account -> mapAccountToAccountResponse(account)).toList();
+		return accounts.stream().map(Account::getAccountResponse).toList();
 	}
 }

@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "AS_MESSAGE", schema = "USRDEBT")
+@Table(name = "AS_DCC_MESSAGE", schema = "USRDEBT")
 @Builder
 @SequenceGenerator(name = "AS_MESSAGE_SEQ", sequenceName = "AS_MESSAGE_SEQ", allocationSize = 1)
 public class Message {

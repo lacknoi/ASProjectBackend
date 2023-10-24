@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "AS_DEBT_CRITERIA", schema = "USRDEBT")
+@Table(name = "AS_DCC_DEBT_CRITERIA", schema = "USRDEBT")
 @SequenceGenerator(name = "AS_CRITERIA_ID_SEQ", sequenceName = "AS_CRITERIA_ID_SEQ", allocationSize = 1)
 public class DebtCriteria {
 	@Id

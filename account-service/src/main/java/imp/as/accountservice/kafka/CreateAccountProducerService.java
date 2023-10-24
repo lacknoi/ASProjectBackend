@@ -13,11 +13,7 @@ public class CreateAccountProducerService {
 	
     private static final String TOPIC = "create-account"; 
 
-    public void sendMessage(String message) {
-    	CreateAccountTopicRequest accountTopic = new CreateAccountTopicRequest();
-    	accountTopic.setAccountNo("ACC01");
-    	accountTopic.setUserName("UserName");
-    	
+    public void sendMessage(CreateAccountTopicRequest accountTopic) {
     	kafkaCreateAccountTemplete.send(TOPIC, accountTopic);
     }
 }

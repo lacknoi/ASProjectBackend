@@ -1,15 +1,18 @@
 package common;
 
-import java.io.Serializable;
+import java.util.Date;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Data
-public class CreateAccountTopicRequest implements Serializable{
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 12345L;
+@Builder
+public class CreateAccountTopicRequest{
+	private Integer accountId;
 	private String accountNo;
-	private String userName;
+	private String accountName;
+	private Date created;
+	private String createdBy;
+	private Date lastUpd;
+	private String lastUpdBy;
 }

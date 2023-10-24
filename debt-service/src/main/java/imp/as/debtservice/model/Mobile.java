@@ -1,8 +1,7 @@
-package imp.as.accountservice.model;
+package imp.as.debtservice.model;
 
 import java.util.Date;
 
-import imp.as.accountservice.dto.response.MobileResponse;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -16,7 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "AS_AC_MOBILES", schema = "USRDEBT")
+@Table(name = "AS_DCC_MOBILES", schema = "USRDEBT")
 public class Mobile {
 	@Id
     private Integer mobileId;
@@ -29,12 +28,4 @@ public class Mobile {
 	private String createdBy;
 	private Date lastUpd;
 	private String lastUpdBy;
-	
-	public MobileResponse getMobileResponse() {
-		return MobileResponse.builder()
-						.mobileId(mobileId)
-						.accountNo(account.getAccountNo())
-						.mobileNo(mobileNo)
-						.build();
-	}
 }

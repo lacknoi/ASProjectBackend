@@ -1,5 +1,5 @@
---drop table AS_TEMP_TRANSACTION
-create table AS_TEMP_TRANSACTION(
+--drop table USRDEBT.AS_DCC_TEMP_TRANSACTION
+create table USRDEBT.AS_DCC_TEMP_TRANSACTION(
   MODE_ID nvarchar2(50)
   , PREASSIGN_ID nvarchar2(50)
   , ACCOUNT_NO nvarchar2(50)

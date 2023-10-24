@@ -1,5 +1,5 @@
---drop table USRDEBT.AS_DEBT_CRITERIA
-create table USRDEBT.AS_DEBT_CRITERIA(
+--drop table USRDEBT.AS_DCC_DEBT_CRITERIA
+create table USRDEBT.AS_DCC_DEBT_CRITERIA(
   CRITERIA_ID int
   , MODE_ID nvarchar2(5)
   , CRITERIA_TYPE nvarchar2(100)

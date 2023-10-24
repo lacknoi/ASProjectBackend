@@ -1,8 +1,9 @@
 package imp.as.debtservice.utils;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
-import java.lang.reflect.Field;
+
 import lombok.Data;
 
 @Data

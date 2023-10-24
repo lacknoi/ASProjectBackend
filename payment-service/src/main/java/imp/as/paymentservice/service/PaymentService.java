@@ -7,7 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import imp.as.paymentservice.dto.request.AccountBalanceRequest;
+import common.CreateAccountTopicRequest;
 import imp.as.paymentservice.dto.response.AccountBalanceResponce;
 import imp.as.paymentservice.model.AccountBalance;
 import imp.as.paymentservice.repository.PMAccountBalanceRepository;
@@ -21,19 +21,19 @@ public class PaymentService{
 	@Autowired
 	private final PMAccountBalanceRepository pmAccountBalanceRepository;
 	
-	public AccountBalanceResponce initAccountBalance(AccountBalanceRequest accountBalanceRequest) {
+	public AccountBalanceResponce initAccountBalance(CreateAccountTopicRequest accountRequest) {
 		AccountBalance accountBalance = new AccountBalance();
-		accountBalance.setAccountNo(accountBalanceRequest.getAccountNo());
+		accountBalance.setAccountNo(accountRequest.getAccountNo());
 		accountBalance.setTotalBalance(BigDecimal.ZERO);
 		accountBalance.setCreated(new Date());
-		accountBalance.setCreatedBy(accountBalanceRequest.getUserName());
+		accountBalance.setCreatedBy(accountRequest.getLastUpdBy());
 		accountBalance.setLastUpd(new Date());
-		accountBalance.setLastUpdBy(accountBalanceRequest.getUserName());
+		accountBalance.setLastUpdBy(accountRequest.getLastUpdBy());
 		
 		pmAccountBalanceRepository.save(accountBalance);
 		
 		return AccountBalanceResponce.builder()
-					.accountNo(accountBalanceRequest.getAccountNo())
+					.accountNo(accountRequest.getAccountNo())
 					.build();
 	}
 	

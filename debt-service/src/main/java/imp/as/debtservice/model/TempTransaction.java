@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "AS_TEMP_TRANSACTION", schema = "USRDEBT")
+@Table(name = "AS_DCC_TEMP_TRANSACTION", schema = "USRDEBT")
 @IdClass(TempTransactionKey.class)
 @Builder
 public class TempTransaction {

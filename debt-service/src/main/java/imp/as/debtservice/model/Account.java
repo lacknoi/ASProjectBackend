@@ -1,8 +1,6 @@
-package imp.as.paymentservice.model;
+package imp.as.debtservice.model;
 
-import java.math.BigDecimal;
 import java.util.Date;
-
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -15,11 +13,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "AS_PM_ACCOUNT_BALANCE", schema = "USRDEBT")
-public class AccountBalance {
+@Table(name = "AS_DCC_ACCOUNTS", schema = "USRDEBT")
+public class Account {
 	@Id
+    private Integer accountId;
 	private String accountNo;
-	private BigDecimal totalBalance;
+	private String accountName;
 	private Date created;
 	private String createdBy;
 	private Date lastUpd;

@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "AS_SMS_TRANSACTION", schema = "USRDEBT")
+@Table(name = "AS_DCC_SMS_TRANSACTION", schema = "USRDEBT")
 @SequenceGenerator(name = "AS_SMS_TRANSACTION_SEQ", sequenceName = "AS_SMS_TRANSACTION_SEQ", allocationSize = 1)
 @Builder
 public class SMSTransaction {
