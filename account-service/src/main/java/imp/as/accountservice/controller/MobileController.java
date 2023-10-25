@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import imp.as.accountservice.dto.request.MobileRequest;
 import imp.as.accountservice.dto.response.ApiResponse;
 import imp.as.accountservice.dto.response.MobileResponse;
+import imp.as.accountservice.exception.BusinessException;
 import imp.as.accountservice.service.MobileService;
 
 @RestController
@@ -22,8 +23,8 @@ public class MobileController extends AbsController{
 	@Autowired
 	private MobileService mobileService;
 	
-	@PostMapping("/registerMobile")
-	public ResponseEntity<ApiResponse> registerMobile(@RequestBody MobileRequest mobileRequest) {
+	@PostMapping
+	public ResponseEntity<ApiResponse> registerMobile(@RequestBody MobileRequest mobileRequest) throws BusinessException {
 		MobileResponse mobileResponse = mobileService.registerMobile(mobileRequest);
 		
 		return responseOK(mobileResponse);

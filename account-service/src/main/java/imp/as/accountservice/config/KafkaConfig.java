@@ -10,9 +10,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.support.serializer.JsonSerializer;
-
-import common.CreateAccountTopicRequest;
 
 @Configuration
 public class KafkaConfig {
@@ -26,14 +23,14 @@ public class KafkaConfig {
 		
 		map.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, server);
 		map.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-		map.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+		map.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
 		
 		return map;
 	}
 	
 	@Bean
-	public KafkaTemplate<String, CreateAccountTopicRequest> kafkaCreateAccountTemplete(){
-		DefaultKafkaProducerFactory<String, CreateAccountTopicRequest> factory 
+	public KafkaTemplate<String, String> kafkaCreateAccountTemplete(){
+		DefaultKafkaProducerFactory<String, String> factory 
 						= new DefaultKafkaProducerFactory<>(producerConfigs());
 		
 		return new KafkaTemplate<>(factory);

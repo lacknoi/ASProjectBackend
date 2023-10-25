@@ -22,6 +22,8 @@ import imp.as.debtservice.repository.MessageRepository;
 import imp.as.debtservice.repository.SMSTransactionRepository;
 import imp.as.debtservice.repository.TempTransactionRepository;
 import imp.as.debtservice.utils.CsvWriter;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
@@ -31,13 +33,14 @@ import lombok.RequiredArgsConstructor;
 public class SMSService{
 	@Autowired
 	private final WebClient.Builder webClientBuilder;
-	
 	@Autowired
 	private final SMSTransactionRepository smsTransactionRepository;
 	@Autowired
 	private final TempTransactionRepository tempTransactionRepository;
 	@Autowired
 	private final MessageRepository messageRepository;
+	@Autowired
+	private final EntityManager em;
 	
 	public MessageResponse mapMessageToMessageResponse(Message message) {
 		return MessageResponse.builder()
@@ -92,32 +95,8 @@ public class SMSService{
 	}
 	
 	public void preassignSMS() throws Exception {
-		ResponseEntity<List<AccountBalanceResponse>> response = webClientBuilder.build().get()
-				.uri(EndpointConstant.ENDPOINT_PAYMENT + EndpointConstant.METHOD_GET_ACCOUNT_BALANCE_DEBT)
-				.retrieve()
-				.toEntityList(AccountBalanceResponse.class)
-				.block();
+		CriteriaBuilder cb = em.getCriteriaBuilder();
 		
-		HttpStatus statusCode = (HttpStatus) response.getStatusCode();
-		if (statusCode == HttpStatus.OK) {
-			List<TempTransaction> tempTransactions = new ArrayList<>();
- 			
-			List<AccountBalanceResponse> balanceResponces = response.getBody();
-			
-			for(AccountBalanceResponse balanceResponce : balanceResponces) {
-				tempTransactions.add(TempTransaction.builder()
-								.modeId("TS")
-								.preassignId("66100001")
-								.accountNo(balanceResponce.getAccountNo())
-								.created(new Date())
-								.createdBy("DebtService")
-								.lastUpd(new Date())
-								.lastUpdBy("DebtService")
-								.build());
-			}
-			
-			tempTransactionRepository.saveAll(tempTransactions);
-		}
 	}
 	
 	public void assignSMS() throws Exception {

@@ -1,8 +1,9 @@
---drop table USRDEBT.AS_DCC_ACCOUNTS
-create table USRDEBT.AS_DCC_ACCOUNTS (
-       ACCOUNT_ID number(5)
-       , ACCOUNT_NO varchar(50)
-       , ACCOUNT_NAME varchar(50)
+--drop table USRDEBT.AS_DCC_MOBILES
+create table USRDEBT.AS_DCC_MOBILES (
+       MOBILE_ID number(5)
+       , ACCOUNT_ID varchar(50)
+       , MOBILE_NO varchar(10)
+       , MOBILE_STATUS varchar(50)
        , CREATED date
        , CREATED_BY varchar(50)
        , LAST_UPD date

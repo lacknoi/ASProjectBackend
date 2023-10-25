@@ -11,7 +11,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 import imp.as.accountservice.constant.AppConstant;
 import imp.as.accountservice.dto.request.AccountRequest;
 import imp.as.accountservice.dto.response.AccountResponse;
-import imp.as.accountservice.kafka.CreateAccountProducerService;
+import imp.as.accountservice.exception.BusinessException;
+import imp.as.accountservice.kafka.ProducerService;
 import imp.as.accountservice.model.Account;
 import imp.as.accountservice.repository.AccountRepository;
 import imp.as.accountservice.utils.DateTimeUtils;
@@ -24,10 +25,12 @@ import lombok.RequiredArgsConstructor;
 public class AccountService{
 	@Autowired
 	private final WebClient.Builder webClientBuilder;
+	
 	@Autowired
 	private final AccountRepository accountRepository;
+	
 	@Autowired
-	private CreateAccountProducerService createAccountProducerService;
+	private ProducerService producerService;
 	
 	public String getNextAccountNo() {
 		String dateFor = DateTimeUtils.formatDate(AppConstant.ACCOUNT_NO_FORMAT, DateTimeUtils.currentDate());
@@ -47,6 +50,7 @@ public class AccountService{
 		Account account = new Account();
 		account.setAccountNo(getNextAccountNo());
 		account.setAccountName(accountRequest.getAccountName());
+		account.setStatusCd(AppConstant.ACC_STATUS_ACTIVE);
 		account.setCreated(new Date());
 		account.setCreatedBy(accountRequest.getUserName());
 		account.setLastUpd(new Date());
@@ -55,17 +59,21 @@ public class AccountService{
 		return account;
 	}
 	
-	public AccountResponse createAccount(AccountRequest accountRequest) {
-		Account account = generateAccount(accountRequest);
-		
-		accountRepository.save(account);
-		
-		createAccountProducerService.sendMessage(account.getCreateAccountTopicRequest());
-		
-		return AccountResponse.builder()
-					.accountNo(account.getAccountNo())
-					.accountId(account.getAccountId())
-					.build();
+	public AccountResponse createAccount(AccountRequest accountRequest) throws BusinessException {
+		try {
+			Account account = generateAccount(accountRequest);
+			
+			accountRepository.save(account);
+			
+			producerService.sendMessageAccountTopic(account.getCreateAccountTopicRequest());
+			
+			return AccountResponse.builder()
+						.accountNo(account.getAccountNo())
+						.accountId(account.getAccountId())
+						.build();
+		}catch (Exception e) {
+			throw new BusinessException("Data not found");
+		}
 	}
 	
 	public List<AccountResponse> getAccount() {

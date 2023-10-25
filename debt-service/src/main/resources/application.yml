@@ -13,6 +13,10 @@ spring:
       ddl-auto: none
   kafka:
     bootstrap-servers: localhost:9092
+    group-id: debt-group
+    key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    auto-offset-reset: earliest
 batch:
    path:
      config: D:/Test/batch-config.properties

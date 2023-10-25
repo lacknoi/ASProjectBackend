@@ -33,6 +33,7 @@ public class DebtCriteria {
 	private String assignId;
 	private Date assignDate;
 	private Date unassignDate;
+	private String accountStatusList;
 	private BigDecimal debtAmtFrom;
 	private BigDecimal debtAmtTo;
 	private Date created;

@@ -1,13 +1,16 @@
 package imp.as.accountservice.model;
 
 import java.util.Date;
+import java.util.List;
 
 import common.CreateAccountTopicRequest;
 import imp.as.accountservice.dto.response.AccountResponse;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -26,10 +29,14 @@ public class Account {
     private Integer accountId;
 	private String accountNo;
 	private String accountName;
+	private String statusCd;
 	private Date created;
 	private String createdBy;
 	private Date lastUpd;
 	private String lastUpdBy;
+	
+	@OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
+	private List<Mobile> mobiles;
 	
 	public AccountResponse getAccountResponse() {
 		return AccountResponse.builder()
@@ -42,6 +49,7 @@ public class Account {
 				.accountId(accountId)
 				.accountNo(accountNo)
 				.accountName(accountName)
+				.statusCd(statusCd)
 				.created(created)
 				.createdBy(createdBy)
 				.lastUpd(lastUpd)

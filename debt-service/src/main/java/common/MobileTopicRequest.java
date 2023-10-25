@@ -2,16 +2,14 @@ package common;
 
 import java.util.Date;
 
-import lombok.Builder;
 import lombok.Data;
 
 @Data
-@Builder
-public class CreateAccountTopicRequest{
+public class MobileTopicRequest {
+	private Integer mobileId;
 	private Integer accountId;
-	private String accountNo;
-	private String accountName;
-	private String statusCd;
+	private String mobileNo;
+	private String mobileStatus;
 	private Date created;
 	private String createdBy;
 	private Date lastUpd;

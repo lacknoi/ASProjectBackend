@@ -43,7 +43,7 @@ public class SMSController extends AbsController{
 		}
 	}
 	
-	@PostMapping("/preassignSMS")
+	@GetMapping("/preassignSMS")
 	public void preassignSMS() {
 		try {
 			smsService.preassignSMS();

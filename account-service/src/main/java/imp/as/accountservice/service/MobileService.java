@@ -10,6 +10,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 import imp.as.accountservice.constant.AppConstant;
 import imp.as.accountservice.dto.request.MobileRequest;
 import imp.as.accountservice.dto.response.MobileResponse;
+import imp.as.accountservice.exception.BusinessException;
+import imp.as.accountservice.kafka.ProducerService;
 import imp.as.accountservice.model.Account;
 import imp.as.accountservice.model.Mobile;
 import imp.as.accountservice.repository.AccountRepository;
@@ -30,29 +32,35 @@ public class MobileService{
 	@Autowired
 	private final MobileRepository mobileRepository;
 	
+	@Autowired
+	private ProducerService producerService;
+	
 	//Service
 	@Autowired final AccountService accountService;
 	
-	public MobileResponse registerMobile(MobileRequest mobileRequest) {
-		Account account = accountRepository.getByAccountNo(mobileRequest.getAccountNo());
-		
-		Integer mobileId = mobileRepository.getNextValMobileSequence();
-		
-		Mobile mobile = new Mobile();
-		mobile.setMobileId(mobileId);
-		mobile.setAccount(account);
-		mobile.setMobileNo(mobileRequest.getMobileNo());
-		mobile.setMobileStatus(AppConstant.MOBILE_STATUS_ACTIVE);
-		mobile.setCreated(new Date());
-		mobile.setCreatedBy(mobileRequest.getUserName());
-		mobile.setLastUpd(new Date());
-		mobile.setLastUpdBy(mobileRequest.getUserName());
-		
-		mobileRepository.save(mobile);
-		
-		return MobileResponse.builder()
-							.accountNo(mobileRequest.getAccountNo())
-							.mobileNo(mobileRequest.getMobileNo()).build();
+	public MobileResponse registerMobile(MobileRequest mobileRequest) throws BusinessException {
+		try {
+			Account account = accountRepository.getByAccountNo(mobileRequest.getAccountNo());
+			
+			Mobile mobile = new Mobile();
+			mobile.setAccount(account);
+			mobile.setMobileNo(mobileRequest.getMobileNo());
+			mobile.setMobileStatus(AppConstant.MOBILE_STATUS_ACTIVE);
+			mobile.setCreated(new Date());
+			mobile.setCreatedBy(mobileRequest.getUserName());
+			mobile.setLastUpd(new Date());
+			mobile.setLastUpdBy(mobileRequest.getUserName());
+			
+			mobileRepository.save(mobile);
+			
+			producerService.sendMessageMobileTopic(mobile.getMobileTopicRequest());
+			
+			return MobileResponse.builder()
+								.accountNo(mobileRequest.getAccountNo())
+								.mobileNo(mobileRequest.getMobileNo()).build();
+		}catch (Exception e) {
+			throw new BusinessException("Data not found");
+		}
 	}
 	
 	public List<MobileResponse> getMobileActiveByAccountNo(String accountNo){

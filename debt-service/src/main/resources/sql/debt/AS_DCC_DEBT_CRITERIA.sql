@@ -12,6 +12,7 @@ create table USRDEBT.AS_DCC_DEBT_CRITERIA(
   , UNASSIGN_DATE date
   , DEBT_AMT_FROM number(22,2)
   , DEBT_AMT_TO number(22,2)
+  , ACCOUNT_STATUS_LIST nvarchar2(2000)
   , CREATED date
   , CREATED_BY nvarchar2(50)
   , LAST_UPD date
