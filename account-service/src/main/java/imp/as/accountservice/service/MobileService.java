@@ -2,6 +2,7 @@ package imp.as.accountservice.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,6 +39,28 @@ public class MobileService{
 	//Service
 	@Autowired final AccountService accountService;
 	
+	public String updateStatusMobile(MobileRequest mobileRequest) throws BusinessException {
+		try {
+			Optional<Mobile> optional = mobileRepository.getMobileByAccountAndMobileNo(mobileRequest.getAccountNo(), mobileRequest.getMobileNo());
+		
+			if(!optional.isEmpty()) {
+				Mobile mobile = optional.get();
+				
+				mobile.setStatus(mobileRequest.getStatus());
+				mobile.setStatusDate(new Date());
+				
+				mobileRepository.save(mobile);
+				
+				producerService.sendMessageMobileTopic(mobile.getMobileTopicRequest());
+				
+				return "Success";
+			}
+			
+			return "Not found";}catch (Exception e) {
+			throw new BusinessException(e);
+		}
+	}
+	
 	public MobileResponse registerMobile(MobileRequest mobileRequest) throws BusinessException {
 		try {
 			Account account = accountRepository.getByAccountNo(mobileRequest.getAccountNo());
@@ -45,7 +68,8 @@ public class MobileService{
 			Mobile mobile = new Mobile();
 			mobile.setAccount(account);
 			mobile.setMobileNo(mobileRequest.getMobileNo());
-			mobile.setMobileStatus(AppConstant.MOBILE_STATUS_ACTIVE);
+			mobile.setStatus(AppConstant.MOBILE_STATUS_ACTIVE);
+			mobile.setStatusDate(new Date());
 			mobile.setCreated(new Date());
 			mobile.setCreatedBy(mobileRequest.getUserName());
 			mobile.setLastUpd(new Date());

@@ -1,4 +1,4 @@
-package common;
+package imp.as.accountservice.dto.request;
 
 import java.util.Date;
 
@@ -7,13 +7,11 @@ import lombok.Data;
 
 @Data
 @Builder
-public class CreateAccountTopicRequest{
+public class AccountTopicRequest{
 	private Integer accountId;
 	private String accountNo;
 	private String accountName;
-	private String statusCd;
-	private Date created;
-	private String createdBy;
+	private String status;
+	private Date statusDate;
 	private Date lastUpd;
-	private String lastUpdBy;
 }

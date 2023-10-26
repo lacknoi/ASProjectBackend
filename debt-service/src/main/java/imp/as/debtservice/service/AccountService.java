@@ -5,8 +5,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import common.CreateAccountTopicRequest;
-import common.MobileTopicRequest;
+import imp.as.debtservice.dto.request.AccountTopicRequest;
+import imp.as.debtservice.dto.request.MobileTopicRequest;
 import imp.as.debtservice.exception.BusinessException;
 import imp.as.debtservice.model.Account;
 import imp.as.debtservice.model.Mobile;
@@ -24,22 +24,20 @@ public class AccountService {
 	@Autowired
 	private MobileRepository mobileRepository;
 	
-	public void createAccount(CreateAccountTopicRequest accountRequest) {
+	public void createAccount(AccountTopicRequest topicRequest) {
 		Account account = new Account();
-		account.setAccountId(accountRequest.getAccountId());
-		account.setAccountNo(accountRequest.getAccountNo());
-		account.setAccountName(accountRequest.getAccountName());
-		account.setStatusCd(accountRequest.getStatusCd());
-		account.setCreated(accountRequest.getCreated());
-		account.setCreatedBy(accountRequest.getCreatedBy());
-		account.setLastUpd(accountRequest.getLastUpd());
-		account.setLastUpdBy(accountRequest.getLastUpdBy());
+		account.setAccountId(topicRequest.getAccountId());
+		account.setAccountNo(topicRequest.getAccountNo());
+		account.setAccountName(topicRequest.getAccountName());
+		account.setStatus(topicRequest.getStatus());
+		account.setStatusDate(topicRequest.getStatusDate());
+		account.setLastUpd(topicRequest.getLastUpd());
 		
 		accountRepository.save(account);
 	}
 	
-	public Account getAccountById(Integer criteriaId) throws BusinessException {
-		Optional<Account> criteriaOpt = accountRepository.findById(criteriaId);
+	public Account getAccountById(Integer accountId) throws BusinessException {
+		Optional<Account> criteriaOpt = accountRepository.findById(accountId);
 		
 		if (criteriaOpt.isEmpty()) {
             throw new BusinessException("Data not found");
@@ -48,18 +46,16 @@ public class AccountService {
 		return criteriaOpt.get();
 	}
 	
-	public void createMobile(MobileTopicRequest mobileTopicRequest) throws BusinessException {
-		Account account = getAccountById(mobileTopicRequest.getAccountId());
+	public void createMobile(MobileTopicRequest topicRequest) throws BusinessException {
+		Account account = getAccountById(topicRequest.getAccountId());
 		
 		Mobile mobile = new Mobile();
-		mobile.setMobileId(mobileTopicRequest.getMobileId());
+		mobile.setMobileId(topicRequest.getMobileId());
 		mobile.setAccount(account);
-		mobile.setMobileNo(mobileTopicRequest.getMobileNo());
-		mobile.setMobileStatus(mobileTopicRequest.getMobileStatus());
-		mobile.setCreated(mobileTopicRequest.getCreated());
-		mobile.setCreatedBy(mobileTopicRequest.getCreatedBy());
-		mobile.setLastUpd(mobileTopicRequest.getLastUpd());
-		mobile.setLastUpdBy(mobileTopicRequest.getLastUpdBy());
+		mobile.setMobileNo(topicRequest.getMobileNo());
+		mobile.setStatus(topicRequest.getStatus());
+		mobile.setStatusDate(topicRequest.getStatusDate());
+		mobile.setLastUpd(topicRequest.getLastUpd());
 		
 		mobileRepository.save(mobile);
 	}

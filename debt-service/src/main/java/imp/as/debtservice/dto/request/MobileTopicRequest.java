@@ -1,4 +1,4 @@
-package common;
+package imp.as.debtservice.dto.request;
 
 import java.util.Date;
 
@@ -9,9 +9,7 @@ public class MobileTopicRequest {
 	private Integer mobileId;
 	private Integer accountId;
 	private String mobileNo;
-	private String mobileStatus;
-	private Date created;
-	private String createdBy;
+	private String status;
+	private Date statusDate;
 	private Date lastUpd;
-	private String lastUpdBy;
 }

@@ -10,5 +10,6 @@ import lombok.NoArgsConstructor;
 public class MobileRequest {
 	private String accountNo;
 	private String mobileNo;
+	private String status;
 	private String userName;
 }

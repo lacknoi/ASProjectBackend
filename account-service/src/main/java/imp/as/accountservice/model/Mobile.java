@@ -2,7 +2,7 @@ package imp.as.accountservice.model;
 
 import java.util.Date;
 
-import common.MobileTopicRequest;
+import imp.as.accountservice.dto.request.MobileTopicRequest;
 import imp.as.accountservice.dto.response.MobileResponse;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,7 +30,8 @@ public class Mobile {
 	@JoinColumn(name = "account_id")
 	private Account account;
 	private String mobileNo;
-	private String mobileStatus;
+	private String status;
+	private Date statusDate;
 	private Date created;
 	private String createdBy;
 	private Date lastUpd;
@@ -49,11 +50,9 @@ public class Mobile {
 						.mobileId(mobileId)
 						.accountId(account.getAccountId())
 						.mobileNo(mobileNo)
-						.mobileStatus(mobileStatus)
-						.created(created)
-						.createdBy(createdBy)
+						.status(status)
+						.statusDate(statusDate)
 						.lastUpd(lastUpd)
-						.lastUpdBy(lastUpdBy)
 						.build();
 	}
 }

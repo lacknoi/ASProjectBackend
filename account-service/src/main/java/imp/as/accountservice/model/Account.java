@@ -3,7 +3,7 @@ package imp.as.accountservice.model;
 import java.util.Date;
 import java.util.List;
 
-import common.CreateAccountTopicRequest;
+import imp.as.accountservice.dto.request.AccountTopicRequest;
 import imp.as.accountservice.dto.response.AccountResponse;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -29,7 +29,8 @@ public class Account {
     private Integer accountId;
 	private String accountNo;
 	private String accountName;
-	private String statusCd;
+	private String status;
+	private Date statusDate;
 	private Date created;
 	private String createdBy;
 	private Date lastUpd;
@@ -44,16 +45,14 @@ public class Account {
 				.build();
 	}
 	
-	public CreateAccountTopicRequest getCreateAccountTopicRequest() {
-		return CreateAccountTopicRequest.builder()
+	public AccountTopicRequest getCreateAccountTopicRequest() {
+		return AccountTopicRequest.builder()
 				.accountId(accountId)
 				.accountNo(accountNo)
 				.accountName(accountName)
-				.statusCd(statusCd)
-				.created(created)
-				.createdBy(createdBy)
+				.status(status)
+				.statusDate(statusDate)
 				.lastUpd(lastUpd)
-				.lastUpdBy(lastUpdBy)
 				.build();
 	}
 }

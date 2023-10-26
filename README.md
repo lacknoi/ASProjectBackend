@@ -7,6 +7,7 @@ bin\windows\zookeeper-server-start.bat config\zookeeper.properties
 bin\windows\kafka-server-start.bat config\server.properties
 bin\windows\kafka-topics.bat --create --topic account-topic --bootstrap-server localhost:9092
 bin\windows\kafka-topics.bat --create --topic mobile-topic --bootstrap-server localhost:9092
+bin\windows\kafka-topics.bat --create --topic account-balance-topic --bootstrap-server localhost:9092
 Step 3: Create a topic to store your events
 bin\windows\kafka-topics.bat --describe --topic account-topic --bootstrap-server localhost:9092
 Step 4: Write some events into the topic

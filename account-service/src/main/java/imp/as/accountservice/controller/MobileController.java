@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -42,5 +43,12 @@ public class MobileController extends AbsController{
 		List<MobileResponse> mobileResponse = mobileService.getAllMobiles();
 		
 		return responseOK(mobileResponse);
+	}
+	
+	@PutMapping("/status")
+	public ResponseEntity<ApiResponse> updateStatusMobile(@RequestBody MobileRequest mobileRequest) throws BusinessException {
+		String res = mobileService.updateStatusMobile(mobileRequest);
+		
+		return responseOK(res);
 	}
 }

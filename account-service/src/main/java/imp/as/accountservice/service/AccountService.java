@@ -50,7 +50,8 @@ public class AccountService{
 		Account account = new Account();
 		account.setAccountNo(getNextAccountNo());
 		account.setAccountName(accountRequest.getAccountName());
-		account.setStatusCd(AppConstant.ACC_STATUS_ACTIVE);
+		account.setStatus(AppConstant.ACC_STATUS_ACTIVE);
+		account.setStatusDate(new Date());
 		account.setCreated(new Date());
 		account.setCreatedBy(accountRequest.getUserName());
 		account.setLastUpd(new Date());
@@ -72,7 +73,7 @@ public class AccountService{
 						.accountId(account.getAccountId())
 						.build();
 		}catch (Exception e) {
-			throw new BusinessException("Data not found");
+			throw new BusinessException(e);
 		}
 	}
 	

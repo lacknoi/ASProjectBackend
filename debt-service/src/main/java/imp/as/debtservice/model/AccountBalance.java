@@ -1,11 +1,11 @@
 package imp.as.debtservice.model;
 
+import java.math.BigDecimal;
 import java.util.Date;
+
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,15 +15,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "AS_DCC_MOBILES", schema = "USRDEBT")
-public class Mobile {
+@Table(name = "AS_DCC_ACCOUNT_BALANCE", schema = "USRDEBT")
+public class AccountBalance {
 	@Id
-    private Integer mobileId;
-	@ManyToOne
-	@JoinColumn(name = "account_id")
-	private Account account;
-	private String mobileNo;
-	private String status;
-	private Date statusDate;
+	private String accountNo;
+	private BigDecimal totalBalance;
 	private Date lastUpd;
 }

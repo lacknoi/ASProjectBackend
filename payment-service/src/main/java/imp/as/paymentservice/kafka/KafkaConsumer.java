@@ -8,7 +8,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import common.CreateAccountTopicRequest;
+import imp.as.paymentservice.dto.request.AccountTopicRequest;
+import imp.as.paymentservice.exception.BusinessException;
 import imp.as.paymentservice.service.PaymentService;
 
 @Component
@@ -16,13 +17,15 @@ public class KafkaConsumer {
 	@Autowired
 	private PaymentService paymentService;
 	
+	private static final String GROUPID = "payment-group";
+	
 	private static final ObjectMapper objectMapper = new ObjectMapper();
 	
-	@KafkaListener(topics = "account-topic", groupId = "payment-group")
-    public void consumeMessage(String message) throws JsonMappingException, JsonProcessingException {
+	@KafkaListener(topics = "account-topic", groupId = GROUPID)
+    public void consumeMessage(String message) throws JsonMappingException, JsonProcessingException, BusinessException {
         System.out.println("Received message: " + message);
         
-        CreateAccountTopicRequest accountTopicRequest = objectMapper.readValue(message, CreateAccountTopicRequest.class);
+        AccountTopicRequest accountTopicRequest = objectMapper.readValue(message, AccountTopicRequest.class);
         
         paymentService.initAccountBalance(accountTopicRequest);
     }
