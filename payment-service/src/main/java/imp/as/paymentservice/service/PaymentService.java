@@ -49,17 +49,11 @@ public class PaymentService{
 		}
 	}
 	
-	public AccountBalanceResponce mapAccountBalanceToAccountBalanceResponce(AccountBalance accountBalance) {
-		return AccountBalanceResponce.builder()
-						.accountNo(accountBalance.getAccountNo())
-						.totalBalance(accountBalance.getTotalBalance())
-						.build();
-	}
-	
 	public List<AccountBalanceResponce> getAccountBalanceDebt() {
 		List<AccountBalance> accountBalances = pmAccountBalanceRepository.getAccountBalanceDebt();
 		
-		return accountBalances.stream().map(accountBalance -> mapAccountBalanceToAccountBalanceResponce(accountBalance))
-				.toList();
+		return accountBalances.stream()
+						.map(AccountBalance::getAccountBalanceResponce)
+						.toList();
 	}
 }

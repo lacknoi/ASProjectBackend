@@ -6,3 +6,7 @@ select a.*,rowid from USRDEBT.AS_DCC_ACCOUNT_BALANCE a;
 
 select a.*,rowid from USRDEBT.AS_AC_MOBILES a;
 select a.*,rowid from USRDEBT.AS_DCC_MOBILES a;
+
+select a.*,rowid from USRDEBT.AS_AC_ASSET_PROMOTION a;
+
+select a.*,rowid from USRDEBT.AS_DCC_DEBT_CRITERIA a;

@@ -82,4 +82,14 @@ public class AccountService{
 		
 		return accounts.stream().map(Account::getAccountResponse).toList();
 	}
+	
+	public Account getAccountByAccountNo(String accountNo) throws BusinessException {
+		Optional<Account> optional = accountRepository.findByAccountNo(accountNo);
+		
+		if (optional.isEmpty()) {
+            throw new BusinessException("Data not found");
+        }
+		
+		return optional.get();
+	}
 }

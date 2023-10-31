@@ -9,6 +9,7 @@ import lombok.Data;
 @Data
 @Builder
 public class AccountBalanceTopicRequest {
+	private Integer accountBalanceId;
 	private String accountNo;
 	private BigDecimal totalBalance;
 	private Date lastUpd;

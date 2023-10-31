@@ -7,6 +7,7 @@ import lombok.Data;
 
 @Data
 public class AccountBalanceTopicRequest {
+	private Integer accountBalanceId;
 	private String accountNo;
 	private BigDecimal totalBalance;
 	private Date lastUpd;

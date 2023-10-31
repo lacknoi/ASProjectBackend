@@ -11,5 +11,7 @@ public class MobileRequest {
 	private String accountNo;
 	private String mobileNo;
 	private String status;
+	private Integer mobileId;
+	private Integer productId;
 	private String userName;
 }

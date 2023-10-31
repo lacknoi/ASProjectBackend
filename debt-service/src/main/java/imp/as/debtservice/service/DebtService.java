@@ -81,6 +81,18 @@ public class DebtService {
 		return getDebtCriteriaById(criteriaId).getDebtCriteriaResponse();
 	}
 	
+	public List<DebtCriteria> getCriteriaByModeId(String modeId) throws BusinessException {
+		Optional<List<DebtCriteria>> optional = criteriaRepository.findByModeId(modeId);
+		
+		return optional.get();
+	}
+	
+	public List<DebtCriteriaResponse> getCriteriaResponseByModeId(String modeId) throws BusinessException {
+		return getCriteriaByModeId(modeId).stream()
+						.map(DebtCriteria::getDebtCriteriaResponse)
+						.toList();
+	}
+	
 	public Integer deleteCriteriaById(Integer criteriaId) throws BusinessException {
 		DebtCriteria debtCriteria = getDebtCriteriaById(criteriaId);
 		

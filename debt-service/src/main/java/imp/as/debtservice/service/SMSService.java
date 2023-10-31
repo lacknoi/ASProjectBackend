@@ -12,10 +12,12 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import imp.as.debtservice.constant.EndpointConstant;
 import imp.as.debtservice.dto.request.MessageRequest;
-import imp.as.debtservice.dto.response.AccountBalanceResponse;
 import imp.as.debtservice.dto.response.MessageResponse;
 import imp.as.debtservice.dto.response.MobileResponse;
+import imp.as.debtservice.model.Account;
+import imp.as.debtservice.model.DebtCriteria;
 import imp.as.debtservice.model.Message;
+import imp.as.debtservice.model.Mobile;
 import imp.as.debtservice.model.SMSTransaction;
 import imp.as.debtservice.model.TempTransaction;
 import imp.as.debtservice.repository.MessageRepository;
@@ -23,7 +25,7 @@ import imp.as.debtservice.repository.SMSTransactionRepository;
 import imp.as.debtservice.repository.TempTransactionRepository;
 import imp.as.debtservice.utils.CsvWriter;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
@@ -31,6 +33,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Transactional
 public class SMSService{
+	public final static String MODE_ID = "TS";
+	
 	@Autowired
 	private final WebClient.Builder webClientBuilder;
 	@Autowired
@@ -41,6 +45,8 @@ public class SMSService{
 	private final MessageRepository messageRepository;
 	@Autowired
 	private final EntityManager em;
+	@Autowired
+	private final DebtService debtService;
 	
 	public MessageResponse mapMessageToMessageResponse(Message message) {
 		return MessageResponse.builder()
@@ -95,8 +101,30 @@ public class SMSService{
 	}
 	
 	public void preassignSMS() throws Exception {
-		CriteriaBuilder cb = em.getCriteriaBuilder();
+		List<DebtCriteria> criterias = debtService.getCriteriaByModeId(MODE_ID);
 		
+		for(DebtCriteria criteria : criterias) {
+			List<Account> accounts = queryPreassignSMS(criteria);
+		}
+	}
+	
+	public List<Account> queryPreassignSMS(DebtCriteria debtCriteria) throws Exception {
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Account> query = cb.createQuery(Account.class);
+        Root<Account> root = query.from(Account.class);
+        root.fetch("mobiles", JoinType.INNER);
+        root.fetch("accountBalance", JoinType.INNER);
+        
+        List<Predicate> predicates = new ArrayList<>();
+        
+        predicates.add(cb.equal(root.get("accountNo"), "66100001"));
+        predicates.add(cb.equal(root.get("mobiles").get("status"), "Active"));
+        predicates.add(cb.greaterThan(root.get("accountBalance").get("totalBalance"), 0));
+
+        query.where(predicates.toArray(new Predicate[0]));
+        List<Account> accounts = em.createQuery(query).getResultList();
+        
+        return accounts;
 	}
 	
 	public void assignSMS() throws Exception {

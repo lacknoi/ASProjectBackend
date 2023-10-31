@@ -11,5 +11,5 @@ public interface AccountRepository extends JpaRepository<Account, Integer> {
 	@Query(value = "SELECT max(accountNo) accountNo from Account")
 	Optional<String> getNextValAccountNoSequence();
 	
-	Account getByAccountNo(String accountNo);
+	Optional<Account> findByAccountNo(String accountNo);
 }

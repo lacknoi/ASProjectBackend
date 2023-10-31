@@ -59,7 +59,7 @@ public class KafkaConsumer {
 	        
 	        AccountBalanceTopicRequest topicRequest = objectMapper.readValue(message, AccountBalanceTopicRequest.class);
 	        
-	        paymentService.saveMobileTopicRequest(topicRequest);
+	        paymentService.saveAccountBalance(topicRequest);
 		}catch (Exception e) {
 
 		}

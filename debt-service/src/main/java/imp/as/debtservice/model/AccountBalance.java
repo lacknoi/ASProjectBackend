@@ -3,9 +3,10 @@ package imp.as.debtservice.model;
 import java.math.BigDecimal;
 import java.util.Date;
 
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,7 +19,10 @@ import lombok.NoArgsConstructor;
 @Table(name = "AS_DCC_ACCOUNT_BALANCE", schema = "USRDEBT")
 public class AccountBalance {
 	@Id
-	private String accountNo;
+	private Integer accountBalanceId;
+	@ManyToOne
+	@JoinColumn(name = "account_no")
+	private Account accountNo;
 	private BigDecimal totalBalance;
 	private Date lastUpd;
 }

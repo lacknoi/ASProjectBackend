@@ -51,4 +51,11 @@ public class MobileController extends AbsController{
 		
 		return responseOK(res);
 	}
+	
+	@PostMapping("/addPromotion")
+	public ResponseEntity<ApiResponse> mobileAddPromotion(@RequestBody MobileRequest mobileRequest) throws BusinessException{
+		mobileService.mobileAddPromotion(mobileRequest);
+		
+		return responseOK("Success");
+	}
 }

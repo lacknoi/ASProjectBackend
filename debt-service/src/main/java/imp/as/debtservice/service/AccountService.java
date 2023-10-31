@@ -46,6 +46,16 @@ public class AccountService {
 		return criteriaOpt.get();
 	}
 	
+	public Account getAccountByNo(String accountNo) throws BusinessException {
+		Optional<Account> criteriaOpt = accountRepository.findByAccountNo(accountNo);
+		
+		if (criteriaOpt.isEmpty()) {
+            throw new BusinessException("Data not found");
+        }
+		
+		return criteriaOpt.get();
+	}
+	
 	public void createMobile(MobileTopicRequest topicRequest) throws BusinessException {
 		Account account = getAccountById(topicRequest.getAccountId());
 		

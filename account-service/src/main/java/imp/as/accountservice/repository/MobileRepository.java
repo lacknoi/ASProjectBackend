@@ -15,4 +15,5 @@ public interface MobileRepository extends JpaRepository<Mobile, Integer> {
 	List<Mobile> getMobileActiveByAccountNo(String accountNo);
 	@Query(value = "SELECT mo from Mobile mo JOIN mo.account ac where ac.accountNo = :accountNo and mo.mobileNo = :mobileNo")
 	Optional<Mobile> getMobileByAccountAndMobileNo(String accountNo, String mobileNo);
+	Optional<Mobile> findByMobileNo(String mobileNo);
 }
