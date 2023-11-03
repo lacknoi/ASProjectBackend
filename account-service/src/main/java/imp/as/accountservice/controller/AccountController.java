@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import imp.as.accountservice.dto.request.AccountRequest;
@@ -31,5 +32,14 @@ public class AccountController extends AbsController{
 		AccountResponse accountResponse = accountService.createAccount(accountRequest);
 
 		return responseOK(accountResponse);
+	}
+	
+	@GetMapping("genInvoice")
+	public ResponseEntity<ApiResponse> generateInvoice(@RequestParam("year") Integer year,
+												@RequestParam("month") Integer month,
+												@RequestParam("userName") String userName) throws BusinessException{
+		accountService.generateInvoice(year, month, userName);
+		
+		return responseOK("Generate Invoice");
 	}
 }

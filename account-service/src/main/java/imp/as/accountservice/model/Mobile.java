@@ -1,15 +1,18 @@
 package imp.as.accountservice.model;
 
 import java.util.Date;
+import java.util.List;
 
 import imp.as.accountservice.dto.request.MobileTopicRequest;
 import imp.as.accountservice.dto.response.MobileResponse;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -36,6 +39,9 @@ public class Mobile {
 	private String createdBy;
 	private Date lastUpd;
 	private String lastUpdBy;
+	
+	@OneToMany(mappedBy = "mobile", cascade = CascadeType.ALL)
+	private List<AssetPromotion> assetPromotions;
 	
 	public MobileResponse getMobileResponse() {
 		return MobileResponse.builder()

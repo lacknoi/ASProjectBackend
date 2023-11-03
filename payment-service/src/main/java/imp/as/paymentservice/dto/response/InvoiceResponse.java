@@ -1,6 +1,4 @@
-package imp.as.paymentservice.dto.request;
-
-import java.math.BigDecimal;
+package imp.as.paymentservice.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AccountBalanceRequest {
+public class InvoiceResponse {
+	private String invoiceNum;
 	private String accountNo;
-	private BigDecimal totalBalance;
 }

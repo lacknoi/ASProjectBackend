@@ -10,12 +10,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import imp.as.paymentservice.dto.request.AccountTopicRequest;
 import imp.as.paymentservice.exception.BusinessException;
-import imp.as.paymentservice.service.PaymentService;
+import imp.as.paymentservice.service.AccountBalanceService;
 
 @Component
 public class KafkaConsumer {
 	@Autowired
-	private PaymentService paymentService;
+	private AccountBalanceService accountBalanceService;
 	
 	private static final String GROUPID = "payment-group";
 	
@@ -27,6 +27,6 @@ public class KafkaConsumer {
         
         AccountTopicRequest accountTopicRequest = objectMapper.readValue(message, AccountTopicRequest.class);
         
-        paymentService.initAccountBalance(accountTopicRequest);
+        accountBalanceService.initAccountBalance(accountTopicRequest);
     }
 }

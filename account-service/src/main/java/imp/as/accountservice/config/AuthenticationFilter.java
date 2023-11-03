@@ -48,7 +48,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 	                throw new RuntimeException("un authorized access to application");
 	        	}
 	        }else {
-//	        	throw new RuntimeException("missing authorization header");
+	        	throw new RuntimeException("missing authorization header");
 	        }
 		}
         

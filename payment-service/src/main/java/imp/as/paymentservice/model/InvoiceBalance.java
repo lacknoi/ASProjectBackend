@@ -20,6 +20,7 @@ public class InvoiceBalance {
 	private String invoiceNum;
 	private String accountNo;
 	private String invoiceType;
+	private Integer billSeq;
 	private Date invoiceDate;
 	private Date dueDate;
 	private BigDecimal invoiceMny;
