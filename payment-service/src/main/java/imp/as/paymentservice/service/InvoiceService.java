@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import imp.as.paymentservice.constant.AppConstant;
 import imp.as.paymentservice.dto.request.AccountBalanceRequest;
@@ -88,21 +87,25 @@ public class InvoiceService {
 	
 	public List<InvoiceResponse> generateInvoices(List<AccountBalanceRequest> accountBalanceRequests
 							, String userName, Integer year, Integer month) throws BusinessException{
-		for(AccountBalanceRequest request : accountBalanceRequests) {
-			InvoiceBalance invoice = generateInvoice(request, userName, year, month);
+		try {
+			for(AccountBalanceRequest request : accountBalanceRequests) {
+				InvoiceBalance invoice = generateInvoice(request, userName, year, month);
+				
+				TransactionRequest transac = new TransactionRequest();
+				transac.setAccountNo(request.getAccountNo());
+				transac.setInvoiceNum(invoice.getInvoiceNum());
+				transac.setMny(request.getTotalBalance());
+				transac.setMovementType(AppConstant.MOVEMENT_TYPE_IN);
+				transac.setUserName(userName);
+				transac.setSeqNum(1);
+				
+				accountBalanceService.updateAccountBalance(transac);
+			}
 			
-			TransactionRequest transac = new TransactionRequest();
-			transac.setAccountNo(request.getAccountNo());
-			transac.setInvoiceNum(invoice.getInvoiceNum());
-			transac.setMny(request.getTotalBalance());
-			transac.setMovementType(AppConstant.MOVEMENT_TYPE_IN);
-			transac.setUserName(userName);
-			transac.setSeqNum(1);
-			
-			accountBalanceService.updateAccountBalance(transac);
+			return null;
+		}catch (Exception e) {
+			throw new BusinessException(e);
 		}
-		
-		return null;
 	}
 }
 

@@ -9,6 +9,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import imp.as.paymentservice.constant.AppConstant;
 import imp.as.paymentservice.dto.request.AccountTopicRequest;
 import imp.as.paymentservice.dto.request.TransactionRequest;
@@ -19,6 +21,7 @@ import imp.as.paymentservice.model.ARTransaction;
 import imp.as.paymentservice.model.AccountBalance;
 import imp.as.paymentservice.repository.ARTransactionRepository;
 import imp.as.paymentservice.repository.AccountBalanceRepository;
+import imp.as.paymentservice.repository.InvoiceBalanceRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
@@ -33,6 +36,8 @@ public class AccountBalanceService{
 	private final AccountBalanceRepository accountBalanceRepository;
 	@Autowired
 	private final ARTransactionRepository arTransactionRepository;
+	@Autowired
+	private InvoiceBalanceRepository invoiceRepository;
 	
 	public AccountBalanceResponce initAccountBalance(AccountTopicRequest accountRequest) throws BusinessException {
 		try {
@@ -97,13 +102,21 @@ public class AccountBalanceService{
 	}
 	
 	public void updateAccountBalance(TransactionRequest request) throws BusinessException {
-		generateARTransaction(request);
-		
-		AccountBalance account = getAccountByAccountNo(request.getAccountNo());
-		
-		if(StringUtils.equals(request.getMovementType(), AppConstant.MOVEMENT_TYPE_IN))
-			account.setTotalBalance(account.getTotalBalance().add(request.getMny()));
-		
-		accountBalanceRepository.save(account);
+		try {
+			generateARTransaction(request);
+			
+			AccountBalance account = getAccountByAccountNo(request.getAccountNo());
+			
+			account.setMinInvoiceDueDate(invoiceRepository.getMinInvoiceDueDate(request.getAccountNo()).get());
+			
+			if(StringUtils.equals(request.getMovementType(), AppConstant.MOVEMENT_TYPE_IN))
+				account.setTotalBalance(account.getTotalBalance().add(request.getMny()));
+			
+			accountBalanceRepository.save(account);
+			
+			producerService.sendMessageAccountBalanceTopic(account.getAccountBalanceTopicRequest());
+		}catch (Exception e) {
+			throw new BusinessException(e);
+		}
 	}
 }

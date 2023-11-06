@@ -4,6 +4,7 @@ create table USRDEBT.AS_PM_ACCOUNT_BALANCE
   ACCOUNT_BALANCE_ID int,
   ACCOUNT_NO    VARCHAR2(20) not null,
   TOTAL_BALANCE NUMBER(16,2),
+  MIN_INVOICE_DUE_DATE date,
   CREATED       date,
   CREATED_BY    varchar(50),
   LAST_UPD      date,

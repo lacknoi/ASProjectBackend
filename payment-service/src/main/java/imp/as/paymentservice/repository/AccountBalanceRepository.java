@@ -11,5 +11,5 @@ import imp.as.paymentservice.model.AccountBalance;
 public interface AccountBalanceRepository extends JpaRepository<AccountBalance, String> {
 	@Query("SELECT e FROM AccountBalance e WHERE e.totalBalance > 0")
     List<AccountBalance> getAccountBalanceDebt();
-    Optional<AccountBalance> findByAccountNo(String accountNo);
+	Optional<AccountBalance> findByAccountNo(String accountNo);
 }

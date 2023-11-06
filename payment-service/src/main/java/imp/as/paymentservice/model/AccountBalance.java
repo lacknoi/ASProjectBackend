@@ -27,6 +27,7 @@ public class AccountBalance {
 	private Integer accountBalanceId;
 	private String accountNo;
 	private BigDecimal totalBalance;
+	private Date minInvoiceDueDate;
 	private Date created;
 	private String createdBy;
 	private Date lastUpd;
@@ -37,6 +38,7 @@ public class AccountBalance {
 									.accountBalanceId(accountBalanceId)
 									.accountNo(accountNo)
 									.totalBalance(totalBalance)
+									.minInvoiceDueDate(minInvoiceDueDate)
 									.lastUpd(lastUpd)
 									.build();
 	}

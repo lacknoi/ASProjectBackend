@@ -24,5 +24,6 @@ public class AccountBalance {
 	@JoinColumn(name = "account_no")
 	private Account accountNo;
 	private BigDecimal totalBalance;
+	private Date minInvoiceDate;
 	private Date lastUpd;
 }

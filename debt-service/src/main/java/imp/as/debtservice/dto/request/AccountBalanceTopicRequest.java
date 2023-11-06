@@ -10,5 +10,6 @@ public class AccountBalanceTopicRequest {
 	private Integer accountBalanceId;
 	private String accountNo;
 	private BigDecimal totalBalance;
+	private Date minInvoiceDueDate;
 	private Date lastUpd;
 }
