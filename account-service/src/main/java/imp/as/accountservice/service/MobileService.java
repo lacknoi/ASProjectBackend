@@ -76,9 +76,7 @@ public class MobileService{
 			mobile.setMobileNo(mobileRequest.getMobileNo());
 			mobile.setStatus(AppConstant.MOBILE_STATUS_ACTIVE);
 			mobile.setStatusDate(new Date());
-			mobile.setCreated(new Date());
 			mobile.setCreatedBy(mobileRequest.getUserName());
-			mobile.setLastUpd(new Date());
 			mobile.setLastUpdBy(mobileRequest.getUserName());
 			
 			mobileRepository.save(mobile);
@@ -135,9 +133,7 @@ public class MobileService{
 			promotion.setProduct(product);
 			promotion.setStatus(AppConstant.STATUS_ACTIVE);
 			promotion.setStatusDate(new Date());
-			promotion.setCreated(new Date());
 			promotion.setCreatedBy(mobileRequest.getUserName());
-			promotion.setLastUpd(new Date());
 			promotion.setLastUpdBy(mobileRequest.getUserName());
 			
 			assetPromotionRepository.save(promotion);

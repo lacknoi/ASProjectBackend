@@ -14,4 +14,5 @@ public interface DebtCriteriaRepository extends JpaRepository<DebtCriteria, Inte
 	Optional<String> getCurrentPreassignId(@Param("modeId") String modeId, @Param("key") String key);
 	
 	Optional<List<DebtCriteria>> findByModeId(String modeId);
+	Optional<List<DebtCriteria>> findByModeIdAndPreassignId(String modeId, String preassignId);
 }

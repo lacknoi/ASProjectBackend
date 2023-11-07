@@ -13,6 +13,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -42,6 +44,17 @@ public class Mobile {
 	
 	@OneToMany(mappedBy = "mobile", cascade = CascadeType.ALL)
 	private List<AssetPromotion> assetPromotions;
+	
+	@PrePersist
+    protected void onCreate() {
+		created = new Date();
+		lastUpd = new Date();
+    }
+	
+	@PreUpdate
+    protected void onUpdate() {
+		lastUpd = new Date();
+    }
 	
 	public MobileResponse getMobileResponse() {
 		return MobileResponse.builder()

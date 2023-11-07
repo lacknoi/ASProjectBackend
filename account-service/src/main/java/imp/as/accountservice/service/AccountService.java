@@ -70,9 +70,7 @@ public class AccountService{
 		account.setAccountName(accountRequest.getAccountName());
 		account.setStatus(AppConstant.ACC_STATUS_ACTIVE);
 		account.setStatusDate(new Date());
-		account.setCreated(new Date());
 		account.setCreatedBy(accountRequest.getUserName());
-		account.setLastUpd(new Date());
 		account.setLastUpdBy(accountRequest.getUserName());
 		
 		return account;

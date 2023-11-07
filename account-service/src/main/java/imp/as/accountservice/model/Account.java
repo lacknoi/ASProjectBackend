@@ -11,6 +11,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -38,6 +40,17 @@ public class Account {
 	
 	@OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
 	private List<Mobile> mobiles;
+	
+	@PrePersist
+    protected void onCreate() {
+		created = new Date();
+		lastUpd = new Date();
+    }
+	
+	@PreUpdate
+    protected void onUpdate() {
+		lastUpd = new Date();
+    }
 	
 	public AccountResponse getAccountResponse() {
 		return AccountResponse.builder()

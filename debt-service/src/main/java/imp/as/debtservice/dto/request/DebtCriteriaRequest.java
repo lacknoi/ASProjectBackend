@@ -15,5 +15,9 @@ public class DebtCriteriaRequest {
 	private String description;
 	private BigDecimal debtMnyFrom;
 	private BigDecimal debtMnyTo;
+	private Integer debtAgeFrom;
+	private Integer debtAgeTo;
+	private String accountStatusList;
+	private String mobileStatusList;
 	private String userName;
 }

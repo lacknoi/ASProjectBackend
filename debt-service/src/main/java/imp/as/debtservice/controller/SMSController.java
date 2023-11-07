@@ -34,7 +34,7 @@ public class SMSController extends AbsController{
 		return responseOK(smsService.saveMessage(messageRequest));
 	}
 	
-	@GetMapping("/assignSMS")
+	@PostMapping("/assignSMS")
 	public void assignSMS() {
 		try {
 			smsService.assignSMS();
@@ -43,10 +43,10 @@ public class SMSController extends AbsController{
 		}
 	}
 	
-	@GetMapping("/preassignSMS")
-	public void preassignSMS() {
+	@PostMapping("/preassignSMS")
+	public void preassignSMS(@RequestParam("preassignId") String preassignId) {
 		try {
-			smsService.preassignSMS();
+			smsService.preassignSMS(preassignId);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

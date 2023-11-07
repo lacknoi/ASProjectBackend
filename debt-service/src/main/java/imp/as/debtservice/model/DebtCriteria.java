@@ -8,6 +8,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -34,12 +36,26 @@ public class DebtCriteria {
 	private Date assignDate;
 	private Date unassignDate;
 	private String accountStatusList;
+	private String mobileStatusList;
 	private BigDecimal debtAmtFrom;
 	private BigDecimal debtAmtTo;
+	private Integer debtAgeFrom;
+	private Integer debtAgeTo;
 	private Date created;
 	private String createdBy;
 	private Date lastUpd;
 	private String lastUpdBy;
+	
+	@PrePersist
+    protected void onCreate() {
+		created = new Date();
+		lastUpd = new Date();
+    }
+	
+	@PreUpdate
+    protected void onUpdate() {
+		lastUpd = new Date();
+    }
 	
 	public DebtCriteriaResponse getDebtCriteriaResponse() {
 		return DebtCriteriaResponse.builder()

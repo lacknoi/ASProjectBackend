@@ -44,9 +44,7 @@ public class AccountBalanceService{
 			AccountBalance accountBalance = new AccountBalance();
 			accountBalance.setAccountNo(accountRequest.getAccountNo());
 			accountBalance.setTotalBalance(BigDecimal.ZERO);
-			accountBalance.setCreated(new Date());
 			accountBalance.setCreatedBy(AppConstant.INIT_USER);
-			accountBalance.setLastUpd(new Date());
 			accountBalance.setLastUpdBy(AppConstant.INIT_USER);
 			
 			accountBalanceRepository.save(accountBalance);
@@ -93,9 +91,7 @@ public class AccountBalanceService{
 		transaction.setMovementDate(new Date());
 		transaction.setRefId(request.getRefId());
 		transaction.setTotalMny(request.getMny());
-		transaction.setCreated(new Date());
 		transaction.setCreatedBy(request.getUserName());
-		transaction.setLastUpd(new Date());
 		transaction.setLastUpdBy(request.getUserName());
 		
 		arTransactionRepository.save(transaction);

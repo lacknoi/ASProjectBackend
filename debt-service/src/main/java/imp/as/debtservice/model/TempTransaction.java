@@ -1,5 +1,6 @@
 package imp.as.debtservice.model;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import jakarta.persistence.Entity;
@@ -27,6 +28,10 @@ public class TempTransaction {
     private String preassignId;
 	@Id
     private String accountNo;
+	private BigDecimal debtMny;
+	private Integer debtAge;
+	private String status;
+	private Date statusDate;
 	private Date created;
 	private String createdBy;
 	private Date lastUpd;

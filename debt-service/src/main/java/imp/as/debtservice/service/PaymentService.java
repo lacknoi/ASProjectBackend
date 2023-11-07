@@ -25,6 +25,7 @@ public class PaymentService {
 		accountBalance.setAccountBalanceId(topicRequest.getAccountBalanceId());
 		accountBalance.setAccountNo(accountService.getAccountByNo(topicRequest.getAccountNo()));
 		accountBalance.setTotalBalance(topicRequest.getTotalBalance());
+		accountBalance.setMinInvoiceDueDate(topicRequest.getMinInvoiceDueDate());
 		accountBalance.setLastUpd(topicRequest.getLastUpd());
 		
 		accountBalanceRepository.save(accountBalance);

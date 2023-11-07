@@ -1,9 +1,11 @@
 package imp.as.debtservice.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,12 +22,18 @@ import imp.as.debtservice.model.Message;
 import imp.as.debtservice.model.Mobile;
 import imp.as.debtservice.model.SMSTransaction;
 import imp.as.debtservice.model.TempTransaction;
+import imp.as.debtservice.repository.DebtCriteriaRepository;
 import imp.as.debtservice.repository.MessageRepository;
 import imp.as.debtservice.repository.SMSTransactionRepository;
 import imp.as.debtservice.repository.TempTransactionRepository;
 import imp.as.debtservice.utils.CsvWriter;
+import imp.as.debtservice.utils.DateTimeUtils;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.criteria.*;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.JoinType;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
@@ -35,12 +43,17 @@ import lombok.RequiredArgsConstructor;
 public class SMSService{
 	public final static String MODE_ID = "TS";
 	
+	public final static String ALL = "ALL";
+	public final static String DELIMITED = ",";
+	
 	@Autowired
 	private final WebClient.Builder webClientBuilder;
 	@Autowired
 	private final SMSTransactionRepository smsTransactionRepository;
 	@Autowired
 	private final TempTransactionRepository tempTransactionRepository;
+	@Autowired
+	private final DebtCriteriaRepository criteriaRepository;
 	@Autowired
 	private final MessageRepository messageRepository;
 	@Autowired
@@ -100,12 +113,38 @@ public class SMSService{
 		csvWriter.writeCsvFile();
 	}
 	
-	public void preassignSMS() throws Exception {
-		List<DebtCriteria> criterias = debtService.getCriteriaByModeId(MODE_ID);
+	public void preassignSMS(String preassignId) throws Exception {
+		List<DebtCriteria> criterias = debtService.getCriteriaByModeIdAndPreassignId(MODE_ID, preassignId);
 		
+		List<TempTransaction> transactions = new ArrayList<>();
+				
 		for(DebtCriteria criteria : criterias) {
 			List<Account> accounts = queryPreassignSMS(criteria);
+			
+			for(Account account : accounts) {
+				for(Mobile mobile : account.getMobiles()) {
+					System.out.println("MobileNo : " + mobile.getMobileNo());
+				}
+				
+				TempTransaction transaction = new TempTransaction();
+				transaction.setModeId(criteria.getModeId());
+				transaction.setPreassignId(criteria.getPreassignId());
+				transaction.setAccountNo(account.getAccountNo());
+				transaction.setCreatedBy("DEBTBATCH");
+				transaction.setCreated(new Date());
+				transaction.setLastUpdBy("DEBTBATCH");
+				transaction.setDebtMny(account.getAccountBalance().getTotalBalance());
+				transaction.setDebtAge(DateTimeUtils.getDayDifference(account.getAccountBalance().getMinInvoiceDueDate(), new Date()));
+				transaction.setStatus(account.getStatus());
+				transaction.setStatusDate(account.getStatusDate());
+				transactions.add(transaction);
+			}
+			
+			criteria.setPreassignDate(new Date());
 		}
+		
+		criteriaRepository.saveAll(criterias);
+		tempTransactionRepository.saveAll(transactions);
 	}
 	
 	public List<Account> queryPreassignSMS(DebtCriteria debtCriteria) throws Exception {
@@ -117,9 +156,31 @@ public class SMSService{
         
         List<Predicate> predicates = new ArrayList<>();
         
-        predicates.add(cb.equal(root.get("accountNo"), "66100001"));
-        predicates.add(cb.equal(root.get("mobiles").get("status"), "Active"));
-        predicates.add(cb.greaterThan(root.get("accountBalance").get("totalBalance"), 0));
+        if(!StringUtils.equals(debtCriteria.getAccountStatusList(), ALL)) {
+        	List<String> stringList = Arrays.asList(debtCriteria.getAccountStatusList().split(DELIMITED));
+        	
+        	// Create a list of predicates for each value in userIds
+            Predicate[] predicat = stringList.stream()
+                    .map(id -> cb.equal(root.get("status"), id))
+                    .toArray(Predicate[]::new);
+            
+        	predicates.add(cb.or(predicat));
+        }
+        if(!StringUtils.equals(debtCriteria.getMobileStatusList(), ALL)) {
+        	List<String> stringList = Arrays.asList(debtCriteria.getMobileStatusList().split(DELIMITED));
+        	
+        	// Create a list of predicates for each value in userIds
+            Predicate[] predicat = stringList.stream()
+                    .map(id -> cb.equal(root.get("mobiles").get("status"), id))
+                    .toArray(Predicate[]::new);
+            
+        	predicates.add(cb.or(predicat));
+        }
+        predicates.add(cb.between(root.get("accountBalance").get("totalBalance")
+        							, debtCriteria.getDebtAmtFrom(), debtCriteria.getDebtAmtTo()));
+        predicates.add(cb.between(root.get("accountBalance").get("minInvoiceDueDate")
+				, DateTimeUtils.addDay(new Date(), -1 * debtCriteria.getDebtAgeTo())
+				, DateTimeUtils.addDay(new Date(), -1 * debtCriteria.getDebtAgeFrom())));
 
         query.where(predicates.toArray(new Predicate[0]));
         List<Account> accounts = em.createQuery(query).getResultList();

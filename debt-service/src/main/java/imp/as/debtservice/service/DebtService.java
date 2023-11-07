@@ -59,9 +59,11 @@ public class DebtService {
 		criteria.setAssignStatus(AppConstant.ASSIGN_STATUS_PREASSIGN);
 		criteria.setDebtAmtFrom(criteriaRequest.getDebtMnyFrom());
 		criteria.setDebtAmtTo(criteriaRequest.getDebtMnyTo());
-		criteria.setCreated(new Date());
+		criteria.setDebtAgeFrom(criteriaRequest.getDebtAgeFrom());
+		criteria.setDebtAgeTo(criteriaRequest.getDebtAgeTo());
+		criteria.setAccountStatusList(criteriaRequest.getAccountStatusList());
+		criteria.setMobileStatusList(criteriaRequest.getMobileStatusList());
 		criteria.setCreatedBy(criteriaRequest.getUserName());
-		criteria.setLastUpd(new Date());
 		criteria.setLastUpdBy(criteriaRequest.getUserName());
 			
 		criteriaRepository.save(criteria);
@@ -83,6 +85,12 @@ public class DebtService {
 	
 	public List<DebtCriteria> getCriteriaByModeId(String modeId) throws BusinessException {
 		Optional<List<DebtCriteria>> optional = criteriaRepository.findByModeId(modeId);
+		
+		return optional.get();
+	}
+	
+	public List<DebtCriteria> getCriteriaByModeIdAndPreassignId(String modeId, String preassignId) throws BusinessException {
+		Optional<List<DebtCriteria>> optional = criteriaRepository.findByModeIdAndPreassignId(modeId, preassignId);
 		
 		return optional.get();
 	}

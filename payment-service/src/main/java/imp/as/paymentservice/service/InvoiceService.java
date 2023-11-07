@@ -75,9 +75,7 @@ public class InvoiceService {
 		
 		invoice.setInvoiceMny(request.getTotalBalance());
 		invoice.setTotalBalance(request.getTotalBalance());
-		invoice.setCreated(new Date());
 		invoice.setCreatedBy(userName);
-		invoice.setLastUpd(new Date());
 		invoice.setLastUpdBy(userName);
 		
 		invoiceRepository.save(invoice);
