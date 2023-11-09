@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ import imp.as.debtservice.model.SMSTransaction;
 import imp.as.debtservice.model.TempTransaction;
 import imp.as.debtservice.repository.DebtCriteriaRepository;
 import imp.as.debtservice.repository.MessageRepository;
+import imp.as.debtservice.repository.MobileRepository;
 import imp.as.debtservice.repository.SMSTransactionRepository;
 import imp.as.debtservice.repository.TempTransactionRepository;
 import imp.as.debtservice.utils.CsvWriter;
@@ -45,9 +47,11 @@ public class SMSService{
 	
 	public final static String ALL = "ALL";
 	public final static String DELIMITED = ",";
+
+	public final static String SYSTEMP = "SYSTEMP";
 	
-	@Autowired
-	private final WebClient.Builder webClientBuilder;
+	public final static String SUBJECT = "Debt payment reminder";
+	
 	@Autowired
 	private final SMSTransactionRepository smsTransactionRepository;
 	@Autowired
@@ -57,9 +61,14 @@ public class SMSService{
 	@Autowired
 	private final MessageRepository messageRepository;
 	@Autowired
+	private final MobileRepository mobileRepository;
+	
+	@Autowired
 	private final EntityManager em;
 	@Autowired
 	private final DebtService debtService;
+	@Autowired
+	private final EmailService emailService;
 	
 	public MessageResponse mapMessageToMessageResponse(Message message) {
 		return MessageResponse.builder()
@@ -94,15 +103,18 @@ public class SMSService{
 						.messageId(mess.getMessageId()).build();
 	}
 	
-	public SMSTransaction mapMobileResponseToSMSTransaction(MobileResponse mobileResponse) {
-		return SMSTransaction.builder()
-						.accountNo(mobileResponse.getAccountNo())
-						.mobileNo(mobileResponse.getMobileNo())
-						.createdBy("DebtService")
-						.lastUpdBy("DebtService")
-						.build();
+	public void sendEmailSMS(List<SMSTransaction> smsTransactions) throws Exception {
+		List<String> accounts = new ArrayList<>();
+		
+		for(SMSTransaction smsTransaction : smsTransactions) {
+			if(!accounts.contains(smsTransaction.getAccountNo())) {
+				emailService.sendEmail(smsTransaction.getEmail(), SUBJECT, "XX");
+				
+				accounts.add(smsTransaction.getAccountNo());
+			}
+		}
+		
 	}
-	
 	public void generateFileSMS(List<SMSTransaction> smsTransactions) throws Exception {
 		CsvWriter<SMSTransaction> csvWriter = new CsvWriter<>("D:\\Test\\uploads\\SMS", "sms.txt", "|");
 		String[] attrNameBody = { "accountNo", "mobileNo"};
@@ -188,35 +200,39 @@ public class SMSService{
         return accounts;
 	}
 	
-	public void assignSMS() throws Exception {
-		List<SMSTransaction> smsTransactions = new ArrayList<>();
+	public void assignSMS(String preassignId) throws Exception {
+		List<DebtCriteria> criterias = debtService.getCriteriaByModeIdAndPreassignId(MODE_ID, preassignId);
 		
-		List<TempTransaction> tempTransactions = tempTransactionRepository.findAll();
+		for(DebtCriteria criteria : criterias) {
+			Optional<List<TempTransaction>> optional = tempTransactionRepository.findByModeIdAndPreassignId(MODE_ID, preassignId);
 			
-		for(TempTransaction tempTransaction : tempTransactions) {
-			ResponseEntity<List<MobileResponse>> responseMobile = webClientBuilder.build().get()
-											.uri(EndpointConstant.ENDPOINT_ACCOUNT + EndpointConstant.ENDPOINT_ACCOUNT_GET_MOBILE_ACTIVE,
-													uriBuilder -> 
-														uriBuilder.queryParam("accountNo", tempTransaction.getAccountNo())
-											.build())
-											.retrieve()
-											.toEntityList(MobileResponse.class)
-											.block();
-											
-			HttpStatus activeCode = (HttpStatus) responseMobile.getStatusCode();
-			if (activeCode == HttpStatus.OK) {
-				List<MobileResponse> mobileResponses = responseMobile.getBody();
+			if(!optional.isEmpty()) {
+				List<SMSTransaction> smsTrans = new ArrayList<>();
 				
-				List<SMSTransaction> smsTrans = mobileResponses.stream()
-										.map(mobile -> mapMobileResponseToSMSTransaction(mobile))
-										.toList();
+				List<TempTransaction> tempTransactions = optional.get();
+				
+				for(TempTransaction tempTran : tempTransactions) {
+					List<Mobile> mobiles = mobileRepository.getMobileActiveByAccountNo(tempTran.getAccountNo());
+					
+					for(Mobile mobile : mobiles) {
+						SMSTransaction smsTransaction = new SMSTransaction();
+						smsTransaction.setAccountNo(mobile.getAccount().getAccountNo());
+						smsTransaction.setMobileNo(mobile.getMobileNo());
+						smsTransaction.setEmail(mobile.getAccount().getEmail());
+						smsTransaction.setCreatedBy(SYSTEMP);
+						smsTransaction.setLastUpdBy(SYSTEMP);
+						
+						smsTrans.add(smsTransaction);
+					}
+				}
 				
 				smsTransactionRepository.saveAll(smsTrans);
-				smsTransactions.addAll(smsTrans);
+				
+				if(!smsTrans.isEmpty()) {
+					generateFileSMS(smsTrans);
+					sendEmailSMS(smsTrans);
+				}
 			}
 		}
-		
-		if(!smsTransactions.isEmpty())
-			generateFileSMS(smsTransactions);
 	}
 }

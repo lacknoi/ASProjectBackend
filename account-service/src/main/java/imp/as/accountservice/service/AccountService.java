@@ -68,6 +68,7 @@ public class AccountService{
 		Account account = new Account();
 		account.setAccountNo(getNextAccountNo());
 		account.setAccountName(accountRequest.getAccountName());
+		account.setEmail(accountRequest.getEmail());
 		account.setStatus(AppConstant.ACC_STATUS_ACTIVE);
 		account.setStatusDate(new Date());
 		account.setCreatedBy(accountRequest.getUserName());

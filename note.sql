@@ -15,3 +15,5 @@ select a.*,rowid from USRDEBT.AS_AC_ASSET_PROMOTION a;
 
 select a.*,rowid from USRDEBT.AS_DCC_DEBT_CRITERIA a;
 select a.*,rowid from USRDEBT.AS_DCC_TEMP_TRANSACTION a;
+
+select a.*,rowid from USRDEBT.AS_DCC_SMS_TRANSACTION a;

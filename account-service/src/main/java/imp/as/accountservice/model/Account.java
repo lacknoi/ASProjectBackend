@@ -31,6 +31,7 @@ public class Account {
     private Integer accountId;
 	private String accountNo;
 	private String accountName;
+	private String email;
 	private String status;
 	private Date statusDate;
 	private Date created;
@@ -63,6 +64,7 @@ public class Account {
 				.accountId(accountId)
 				.accountNo(accountNo)
 				.accountName(accountName)
+				.email(email)
 				.status(status)
 				.statusDate(statusDate)
 				.lastUpd(lastUpd)

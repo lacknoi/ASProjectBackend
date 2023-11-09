@@ -29,6 +29,7 @@ public class AccountService {
 		account.setAccountId(topicRequest.getAccountId());
 		account.setAccountNo(topicRequest.getAccountNo());
 		account.setAccountName(topicRequest.getAccountName());
+		account.setEmail(topicRequest.getEmail());
 		account.setStatus(topicRequest.getStatus());
 		account.setStatusDate(topicRequest.getStatusDate());
 		account.setLastUpd(topicRequest.getLastUpd());
