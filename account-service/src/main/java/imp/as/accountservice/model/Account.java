@@ -61,7 +61,6 @@ public class Account {
 	
 	public AccountTopicRequest getCreateAccountTopicRequest() {
 		return AccountTopicRequest.builder()
-				.accountId(accountId)
 				.accountNo(accountNo)
 				.accountName(accountName)
 				.email(email)

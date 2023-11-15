@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class MobileTopicRequest {
 	private Integer mobileId;
-	private Integer accountId;
+	private String accountNo;
 	private String mobileNo;
 	private String status;
 	private Date statusDate;

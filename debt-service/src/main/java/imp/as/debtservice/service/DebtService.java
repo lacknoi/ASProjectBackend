@@ -44,6 +44,20 @@ public class DebtService {
 		}
 	}
 	
+	public String getNextAssignId(DebtCriteriaRequest criteriaRequest) {
+		String key = DateUtil.convertDateToString(new Date(), AppConstant.PREASSIGN_ID_KEY);
+		
+		Optional<String> preassignOpt = criteriaRepository.getCurrentAssignId(criteriaRequest.getModeId(), key + "%");
+		
+		if(!preassignOpt.isEmpty()) {
+			Integer nextId = Integer.parseInt(preassignOpt.get().substring(preassignOpt.get().length() - 4)) + 1;
+			
+			return key + String.format("%04d", nextId);
+		}else {
+			return key + "0001";
+		}
+	}
+	
 	public void createCriteria(DebtCriteriaRequest criteriaRequest) {
 //		System.out.println("Filename : " + criteriaRequest.getFile().getOriginalFilename());
 		

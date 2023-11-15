@@ -8,15 +8,12 @@ import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
 
-import imp.as.debtservice.constant.EndpointConstant;
+import imp.as.debtservice.constant.AppConstant;
+import imp.as.debtservice.dto.request.DebtCriteriaRequest;
 import imp.as.debtservice.dto.request.MessageRequest;
 import imp.as.debtservice.dto.response.MessageResponse;
-import imp.as.debtservice.dto.response.MobileResponse;
 import imp.as.debtservice.model.Account;
 import imp.as.debtservice.model.DebtCriteria;
 import imp.as.debtservice.model.Message;
@@ -141,7 +138,7 @@ public class SMSService{
 				TempTransaction transaction = new TempTransaction();
 				transaction.setModeId(criteria.getModeId());
 				transaction.setPreassignId(criteria.getPreassignId());
-				transaction.setAccountNo(account.getAccountNo());
+				transaction.setAccount(account);
 				transaction.setCreatedBy("DEBTBATCH");
 				transaction.setCreated(new Date());
 				transaction.setLastUpdBy("DEBTBATCH");
@@ -212,7 +209,7 @@ public class SMSService{
 				List<TempTransaction> tempTransactions = optional.get();
 				
 				for(TempTransaction tempTran : tempTransactions) {
-					List<Mobile> mobiles = mobileRepository.getMobileActiveByAccountNo(tempTran.getAccountNo());
+					List<Mobile> mobiles = mobileRepository.getMobileActiveByAccountNo(tempTran.getAccount().getAccountNo());
 					
 					for(Mobile mobile : mobiles) {
 						SMSTransaction smsTransaction = new SMSTransaction();
@@ -228,11 +225,24 @@ public class SMSService{
 				
 				smsTransactionRepository.saveAll(smsTrans);
 				
+				tempTransactionRepository.deleteAllInBatch(tempTransactions);
+				
 				if(!smsTrans.isEmpty()) {
 					generateFileSMS(smsTrans);
 					sendEmailSMS(smsTrans);
 				}
 			}
+			
+			String assignId = debtService.getNextAssignId(DebtCriteriaRequest.builder()
+											.modeId(MODE_ID)
+											.build());
+			
+			criteria.setAssignDate(new Date());
+			criteria.setAssignId(assignId);
+			criteria.setAssignStatus(AppConstant.ASSIGN_STATUS_ASSIGN);
+			criteria.setUnassignDate(DateTimeUtils.addDay(new Date(), AppConstant.ASSIGN_DURETION_TS));
 		}
+		
+		criteriaRepository.saveAll(criterias);
 	}
 }

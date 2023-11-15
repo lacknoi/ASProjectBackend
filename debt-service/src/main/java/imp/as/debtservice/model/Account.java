@@ -20,7 +20,6 @@ import lombok.NoArgsConstructor;
 @Table(name = "AS_DCC_ACCOUNTS", schema = "USRDEBT")
 public class Account {
 	@Id
-    private Integer accountId;
 	private String accountNo;
 	private String accountName;
 	private String email;

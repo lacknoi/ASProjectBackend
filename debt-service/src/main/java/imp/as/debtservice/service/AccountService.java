@@ -26,7 +26,6 @@ public class AccountService {
 	
 	public void createAccount(AccountTopicRequest topicRequest) {
 		Account account = new Account();
-		account.setAccountId(topicRequest.getAccountId());
 		account.setAccountNo(topicRequest.getAccountNo());
 		account.setAccountName(topicRequest.getAccountName());
 		account.setEmail(topicRequest.getEmail());
@@ -58,7 +57,7 @@ public class AccountService {
 	}
 	
 	public void createMobile(MobileTopicRequest topicRequest) throws BusinessException {
-		Account account = getAccountById(topicRequest.getAccountId());
+		Account account = getAccountByNo(topicRequest.getAccountNo());
 		
 		Mobile mobile = new Mobile();
 		mobile.setMobileId(topicRequest.getMobileId());

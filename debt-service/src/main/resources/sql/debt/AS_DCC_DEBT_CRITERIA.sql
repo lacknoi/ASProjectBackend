@@ -16,6 +16,7 @@ create table USRDEBT.AS_DCC_DEBT_CRITERIA(
   , DEBT_AGE_TO int
   , ACCOUNT_STATUS_LIST nvarchar2(2000)
   , MOBILE_STATUS_LIST nvarchar2(2000)
+  , MESSAGE_ID int
   , CREATED date
   , CREATED_BY nvarchar2(50)
   , LAST_UPD date

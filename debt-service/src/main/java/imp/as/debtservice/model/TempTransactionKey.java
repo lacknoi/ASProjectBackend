@@ -10,7 +10,7 @@ import lombok.Data;
 public class TempTransactionKey {
     private String modeId;
     private String preassignId;
-    private String accountNo;
+    private Account account;
     
     @Override
     public boolean equals(Object o) {
@@ -19,11 +19,11 @@ public class TempTransactionKey {
         TempTransactionKey that = (TempTransactionKey) o;
         return Objects.equals(getModeId(), that.getModeId()) &&
                Objects.equals(getPreassignId(), that.getPreassignId()) &&
-               Objects.equals(getAccountNo(), that.getAccountNo());
+               Objects.equals(getAccount().getAccountNo(), that.getAccount().getAccountNo());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getModeId(), getPreassignId(), getAccountNo());
+        return Objects.hash(getModeId(), getPreassignId(), getAccount().getAccountNo());
     }
 }

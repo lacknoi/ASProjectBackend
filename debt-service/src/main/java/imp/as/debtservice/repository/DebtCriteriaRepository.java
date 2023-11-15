@@ -13,6 +13,9 @@ public interface DebtCriteriaRepository extends JpaRepository<DebtCriteria, Inte
 	@Query(value = "select max(preassignId) from DebtCriteria where modeId = :modeId and preassignId like :key")
 	Optional<String> getCurrentPreassignId(@Param("modeId") String modeId, @Param("key") String key);
 	
+	@Query(value = "select max(assignId) from DebtCriteria where modeId = :modeId and assignId like :key")
+	Optional<String> getCurrentAssignId(@Param("modeId") String modeId, @Param("key") String key);
+	
 	Optional<List<DebtCriteria>> findByModeId(String modeId);
 	Optional<List<DebtCriteria>> findByModeIdAndPreassignId(String modeId, String preassignId);
 }

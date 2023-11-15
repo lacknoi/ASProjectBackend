@@ -3,9 +3,12 @@ package imp.as.debtservice.model;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -27,7 +30,9 @@ public class TempTransaction {
 	@Id
     private String preassignId;
 	@Id
-    private String accountNo;
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "account_no", referencedColumnName = "accountNo")
+    private Account account;
 	private BigDecimal debtMny;
 	private Integer debtAge;
 	private String status;

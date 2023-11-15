@@ -67,7 +67,7 @@ public class Mobile {
 	public MobileTopicRequest getMobileTopicRequest() {
 		return MobileTopicRequest.builder()
 						.mobileId(mobileId)
-						.accountId(account.getAccountId())
+						.accountNo(account.getAccountNo())
 						.mobileNo(mobileNo)
 						.status(status)
 						.statusDate(statusDate)

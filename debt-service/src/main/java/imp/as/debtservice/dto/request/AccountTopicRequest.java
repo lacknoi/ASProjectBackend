@@ -6,7 +6,6 @@ import lombok.Data;
 
 @Data
 public class AccountTopicRequest{
-	private Integer accountId;
 	private String accountNo;
 	private String accountName;
 	private String email;

@@ -20,7 +20,7 @@ public class Mobile {
 	@Id
     private Integer mobileId;
 	@ManyToOne
-	@JoinColumn(name = "account_id")
+	@JoinColumn(name = "account_no")
 	private Account account;
 	private String mobileNo;
 	private String status;

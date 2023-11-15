@@ -9,4 +9,6 @@ public class AppConstant {
 	public static final String ASSIGN_STATUS_PREASSIGN = "PA";
 	public static final String ASSIGN_STATUS_ASSIGN = "AS";
 	public static final String ASSIGN_STATUS_UNASSIGN = "UN";
+	
+	public static final Integer ASSIGN_DURETION_TS = 7;
 }
