@@ -51,4 +51,13 @@ public class SMSController extends AbsController{
 			e.printStackTrace();
 		}
 	}
+	
+	@PostMapping("/sendSMS")
+	public void sendSMS(@RequestParam("assignId") String assignId) {
+		try {
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

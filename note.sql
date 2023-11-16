@@ -1,5 +1,5 @@
 select a.*,rowid from USRDEBT.AS_AC_ACCOUNTS a;
-select a.*,rowid from USRDEBT.AS_DCC_ACCOUNTS a;
+select a.*,rowid from USRDEBT.AS_DCC_ACCOUNTS a; --Active
 
 select a.*,rowid from USRDEBT.AS_DCC_ACCOUNT_BALANCE a;
 
@@ -12,8 +12,10 @@ select a.*,rowid from USRDEBT.AS_DCC_MOBILES a;
 
 select a.*,rowid from USRDEBT.AS_AC_ASSET_PROMOTION a;
 --select a.*,rowid from USRDEBT.AS_AC_PRODUCT a;
+select a.*,rowid from USRDEBT.AS_DCC_REASON a;
 
 select a.*,rowid from USRDEBT.AS_DCC_DEBT_CRITERIA a;
 select a.*,rowid from USRDEBT.AS_DCC_TEMP_TRANSACTION a;
 
+select a.*,rowid from USRDEBT.AS_DCC_TRANSACTION_BACKLOG a;
 select a.*,rowid from USRDEBT.AS_DCC_SMS_TRANSACTION a;

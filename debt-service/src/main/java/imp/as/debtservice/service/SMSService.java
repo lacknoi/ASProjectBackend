@@ -20,11 +20,13 @@ import imp.as.debtservice.model.Message;
 import imp.as.debtservice.model.Mobile;
 import imp.as.debtservice.model.SMSTransaction;
 import imp.as.debtservice.model.TempTransaction;
+import imp.as.debtservice.model.TransactionBacklog;
 import imp.as.debtservice.repository.DebtCriteriaRepository;
 import imp.as.debtservice.repository.MessageRepository;
 import imp.as.debtservice.repository.MobileRepository;
 import imp.as.debtservice.repository.SMSTransactionRepository;
 import imp.as.debtservice.repository.TempTransactionRepository;
+import imp.as.debtservice.repository.TransactionBacklogRepository;
 import imp.as.debtservice.utils.CsvWriter;
 import imp.as.debtservice.utils.DateTimeUtils;
 import jakarta.persistence.EntityManager;
@@ -45,8 +47,6 @@ public class SMSService{
 	public final static String ALL = "ALL";
 	public final static String DELIMITED = ",";
 
-	public final static String SYSTEMP = "SYSTEMP";
-	
 	public final static String SUBJECT = "Debt payment reminder";
 	
 	@Autowired
@@ -59,6 +59,8 @@ public class SMSService{
 	private final MessageRepository messageRepository;
 	@Autowired
 	private final MobileRepository mobileRepository;
+	@Autowired
+	private final TransactionBacklogRepository backlogRepository;
 	
 	@Autowired
 	private final EntityManager em;
@@ -197,6 +199,48 @@ public class SMSService{
         return accounts;
 	}
 	
+	public boolean assignCheckCriteria(DebtCriteria criteria, TempTransaction transaction) {
+		List<String> accountStatusList = Arrays.asList(criteria.getAccountStatusList().split(DELIMITED));
+		List<String> mobileStatusList = Arrays.asList(criteria.getMobileStatusList().split(DELIMITED));
+		
+		//Account Status
+		if(!accountStatusList.contains(transaction.getAccount().getStatus())) {
+			backlogRepository.save(debtService.generateTransactionBacklog(criteria, transaction, 1));
+			return false;
+		}
+		
+		//Mobile Status
+		boolean mobileBoo = false;
+		for(Mobile mobile : transaction.getAccount().getMobiles()) {
+			if(mobileStatusList.contains(mobile.getStatus())) {
+				mobileBoo = true;
+			}
+		}
+		if(!mobileBoo) {
+			backlogRepository.save(debtService.generateTransactionBacklog(criteria, transaction, 2));
+			return false;
+		}
+		
+		//Debt amt
+		if(!(criteria.getDebtAmtFrom().compareTo(transaction.getDebtMny()) <= 0
+				&& criteria.getDebtAmtTo().compareTo(transaction.getDebtMny()) >= 0)) {
+			backlogRepository.save(debtService.generateTransactionBacklog(criteria, transaction, 3));
+			return false;
+		}
+		
+		//Debt Age
+		Date minDue = transaction.getAccount().getAccountBalance().getMinInvoiceDueDate();
+		Date fromDue = DateTimeUtils.addDay(new Date(), -1 * criteria.getDebtAgeTo());
+		Date toDue = DateTimeUtils.addDay(new Date(), -1 * criteria.getDebtAgeFrom());
+
+		if(!(fromDue.compareTo(minDue) <= 0 && toDue.compareTo(minDue) >= 0)) {
+			backlogRepository.save(debtService.generateTransactionBacklog(criteria, transaction, 4));
+			return false;
+		}
+		
+		return true;
+	}
+	
 	public void assignSMS(String preassignId) throws Exception {
 		List<DebtCriteria> criterias = debtService.getCriteriaByModeIdAndPreassignId(MODE_ID, preassignId);
 		
@@ -209,17 +253,23 @@ public class SMSService{
 				List<TempTransaction> tempTransactions = optional.get();
 				
 				for(TempTransaction tempTran : tempTransactions) {
-					List<Mobile> mobiles = mobileRepository.getMobileActiveByAccountNo(tempTran.getAccount().getAccountNo());
+					boolean res = assignCheckCriteria(criteria, tempTran);
 					
-					for(Mobile mobile : mobiles) {
-						SMSTransaction smsTransaction = new SMSTransaction();
-						smsTransaction.setAccountNo(mobile.getAccount().getAccountNo());
-						smsTransaction.setMobileNo(mobile.getMobileNo());
-						smsTransaction.setEmail(mobile.getAccount().getEmail());
-						smsTransaction.setCreatedBy(SYSTEMP);
-						smsTransaction.setLastUpdBy(SYSTEMP);
+					if(res) {
+//						List<Mobile> mobiles = mobileRepository.getMobileActiveByAccountNo(tempTran.getAccount().getAccountNo());
 						
-						smsTrans.add(smsTransaction);
+						for(Mobile mobile : tempTran.getAccount().getMobiles()) {
+							if(StringUtils.equalsIgnoreCase(mobile.getMobileNo(), ALL)) {
+								SMSTransaction smsTransaction = new SMSTransaction();
+								smsTransaction.setAccountNo(mobile.getAccount().getAccountNo());
+								smsTransaction.setMobileNo(mobile.getMobileNo());
+								smsTransaction.setEmail(mobile.getAccount().getEmail());
+								smsTransaction.setCreatedBy(AppConstant.USER);
+								smsTransaction.setLastUpdBy(AppConstant.USER);
+								
+								smsTrans.add(smsTransaction);
+							}
+						}
 					}
 				}
 				

@@ -12,6 +12,8 @@ import imp.as.debtservice.dto.request.DebtCriteriaRequest;
 import imp.as.debtservice.dto.response.DebtCriteriaResponse;
 import imp.as.debtservice.exception.BusinessException;
 import imp.as.debtservice.model.DebtCriteria;
+import imp.as.debtservice.model.TempTransaction;
+import imp.as.debtservice.model.TransactionBacklog;
 import imp.as.debtservice.repository.DebtCriteriaRepository;
 import imp.as.debtservice.utils.DateUtil;
 import jakarta.transaction.Transactional;
@@ -133,5 +135,19 @@ public class DebtService {
 		criteria.setLastUpdBy(request.getUserName());
 		
 		return criteria.getDebtCriteriaResponse();
+	}
+	
+	public TransactionBacklog generateTransactionBacklog(DebtCriteria criteria, TempTransaction transaction, Integer reason) {
+		TransactionBacklog backlog = new TransactionBacklog();
+		backlog.setModeId(transaction.getModeId());
+		backlog.setPreassignId(criteria.getPreassignId());
+		backlog.setPreassignDate(criteria.getPreassignDate());
+		backlog.setAssignId(criteria.getAssignId());
+		backlog.setAssignDate(criteria.getAssignDate());
+		backlog.setAccount(transaction.getAccount());
+		backlog.setReasonId(reason);
+		backlog.setCreatedBy(AppConstant.USER);
+		
+		return backlog;
 	}
 }
